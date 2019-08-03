@@ -11,12 +11,16 @@ body {
 .ide {
 	color: #fff;
 	background-color: rgb(39, 47, 63);
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 550px;
-	transform: translate(-50%, -50%);
-	overflow: hidden;
+	min-width: 540px;
+	min-height: 100vh;
+	/* overflow-x: scroll;
+	overflow-y: scroll; */
+}
+
+.ide-header {
+	position: fixed;
+	left: 0;
+	right: 0;
 }
 
 .ide-header, .ide-footer {
@@ -112,4 +116,20 @@ a.value {
 
 .value::after, .value::before {
 	color: #8bc34a;
+}
+
+
+@media screen and (min-width: 550px) and (min-height: 500px) {
+	.ide {
+		color: #fff;
+		background-color: rgb(39, 47, 63);
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 550px;
+    max-height: 500px;
+		min-height: auto;
+		overflow: hidden;
+	}	
 }
