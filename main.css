@@ -23,7 +23,7 @@ body {
 .ide {
 	color: #fff;
 	background-color: rgb(39, 47, 63);
-	min-width: 555px;
+	min-width: 450px;
 	overflow: scroll;
 }
 
@@ -83,7 +83,6 @@ body {
 
 .ide-body .lines .line, .ide-body .editor .line {
 	display: block;
-
 }
 
 .ide-body .editor {
@@ -127,7 +126,7 @@ a.value {
 	color: #8bc34a;
 }
 
-
+/* When desktop */
 @media (hover: hover) {
 	body {
     font-size: 16px;
@@ -147,21 +146,33 @@ a.value {
 	}
 }
 
-@media screen and (min-width: 551px) and (min-height: 540px){
-	.ide-body .lines .line.h-l,
-	.ide-body .lines .line.h-xl {
-		display: none;
+.ide-body .lines .line.h-m,
+.ide-body .lines .line.h-l,
+.ide-body .lines .line.h-xl,
+.ide-body .lines .line.h-xxl {
+	display: none;
+}
+
+@media (hover: none) and (min-height: 410px) {
+	.ide-body .lines .line.h-m {
+		display: block;
 	}
 }
 
-@media screen and (max-height: 540px) {
+@media (hover: none) and (min-height: 500px) {
 	.ide-body .lines .line.h-l {
-		display: none;
+		display: block;
 	}
 }
 
-@media screen and (max-height: 410px) {
+@media (hover: none) and (min-height: 590px) {
 	.ide-body .lines .line.h-xl {
-		display: none;
+		display: block;
+	}
+}
+
+@media (hover: none) and (min-height: 670px) {
+	.ide-body .lines .line.h-xxl {
+		display: block;
 	}
 }
