@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style media="screen">
+			.content { height: 250px; }
+			.popup-content { 
+				height: 200px;
+			    padding: 30px;
+			    border: 1px blue solid;
+			}
+			.overlay {
+				position: absolute;
+				display: block;
+				top: 0;
+				bottom: 0;
+				right: 0;
+				left: 0;
+				min-height: 100vh;
+				z-index: 2147483646;
+				-webkit-transition: opacity 0.5s ease-out 1s;
+				transition: opacity 0.5s ease-out 1s;
+				background-color: rgba(255, 255, 255, 0.6);	
+			}
+			.scrollable {
+				height: 100vh;
+				overflow: scroll;	
+			}
+		</style>
+	</head>
+	<body style="overflow: hidden">
+		<h1 class="content">Content</h1>
+		<h1 class="content">Content</h1>
+		<h1 class="content">Content</h1>
+		<h1 class="content">Content</h1>
+		<h1 class="content">Content</h1>
+		<h1 class="content">Content</h1>
+		<h1 class="content">Content</h1>
+		<h1 class="content">Content</h1>
+		<div class="overlay">
+			<div class="scrollable">
+				<h2 class="popup-content">Popup</h2>
+				<h2 class="popup-content">Popup</h2>
+				<h2 class="popup-content">Popup</h2>
+				<h2 class="popup-content">Popup</h2>
+				<h2 class="popup-content">Popup</h2>
+				<h2 class="popup-content">Popup</h2>
+				<h2 class="popup-content">Popup</h2>
+			</div>
+		</div>
+	</body>
+</html>
