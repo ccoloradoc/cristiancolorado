@@ -6,6 +6,15 @@
 		<style media="screen">
 			/* Stetics */
 			.body { background-color: lightgray; }
+			.fixed {
+				overflow-y: hidden;
+				position: fixed;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;	
+				max-height: 100vh;
+			}
 			.content {
 				height: 250px;
 			    margin: 20px;
@@ -29,7 +38,7 @@
 				bottom: 0;
 				right: 0;
 				left: 0;
-				min-height: 100vh;
+				max-height: 100vh;
 				z-index: 2147483646;
 				-webkit-transition: opacity 0.5s ease-out 1s;
 				transition: opacity 0.5s ease-out 1s;
@@ -41,7 +50,7 @@
 			}
 		</style>
 	</head>
-	<body class="body" style="overflow-y: hidden">
+	<body class="body fixed" style="overflow-y: hidden">
 		<h1 class="content">Content A</h1>
 		<h1 class="content">Content B</h1>
 		<h1 class="content">Content C</h1>
