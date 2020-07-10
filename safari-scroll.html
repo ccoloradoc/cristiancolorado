@@ -13,7 +13,7 @@
 				bottom: 0;
 				left: 0;
 				right: 0;	
-				max-height: 100vh;
+				/* height: 100%; */
 			}
 			.content {
 				height: 250px;
@@ -25,32 +25,46 @@
 			.popup-content { 
 				height: 250px;
 				padding: 20px;
-				margin: 20px;
+				margin: 40px 20px;
 				background-color: lightgoldenrodyellow;
 				border-radius: 3px;
 			}
 			
 			
 			.overlay {
-				position: absolute;
-				display: block;
-				top: 0;
-				bottom: 0;
-				right: 0;
-				left: 0;
-				max-height: 100vh;
-				z-index: 2147483646;
-				-webkit-transition: opacity 0.5s ease-out 1s;
-				transition: opacity 0.5s ease-out 1s;
-				background-color: rgba(255, 255, 255, 0.6);	
+				position: fixed;
+			    display: block;
+			    /* height: 100%; */
+			    width: 100%;
+			    top: 0;
+			    bottom: 0;
+			    left: 0;
+			    right: 0;
 			}
-			.scrollable {
+			
+			.card {
+				background-color: #fff;
+				max-height: 100%;
+			}
+			
+			.card .header {
+				width: 100%;
+			    background-color: #1038a9;
+			    padding: 18px 24px;
+			    color: #fff;	
+			}
+			
+			.card .body {				
 				height: 100vh;
-				overflow: scroll;	
+				overflow: scroll;
+				-webkit-overflow-scrolling: touch;	
+			}
+			.card .body .wrapper {
+				margin: 48px 20px;
 			}
 		</style>
 	</head>
-	<body class="body fixed" style="overflow-y: hidden">
+	<body class="body fixed">
 		<h1 class="content">Content A</h1>
 		<h1 class="content">Content B</h1>
 		<h1 class="content">Content C</h1>
@@ -64,19 +78,24 @@
 		<h1 class="content">Content K</h1>
 		<h1 class="content">Content L</h1>
 		<div class="overlay">
-			<div class="scrollable">
-				<h2 class="popup-content">Popup A</h2>
-				<h2 class="popup-content">Popup B</h2>
-				<h2 class="popup-content">Popup C</h2>
-				<h2 class="popup-content">Popup D</h2>
-				<h2 class="popup-content">Popup E</h2>
-				<h2 class="popup-content">Popup F</h2>
-				<h2 class="popup-content">Popup G</h2>
-				<h2 class="popup-content">Popup H</h2>
-				<h2 class="popup-content">Popup I</h2>
-				<h2 class="popup-content">Popup J</h2>
-				<h2 class="popup-content">Popup K</h2>
-				<h2 class="popup-content">Popup L</h2>
+			<div class="card">
+				<div class="header">HEADER</div>
+				<div class="body">
+					<div class="wrapper">
+						<h2 class="popup-content">Popup A</h2>
+						<h2 class="popup-content">Popup B</h2>
+						<h2 class="popup-content">Popup C</h2>
+						<h2 class="popup-content">Popup D</h2>
+						<h2 class="popup-content">Popup E</h2>
+						<h2 class="popup-content">Popup F</h2>
+						<h2 class="popup-content">Popup G</h2>
+						<h2 class="popup-content">Popup H</h2>
+						<h2 class="popup-content">Popup I</h2>
+						<h2 class="popup-content">Popup J</h2>
+						<h2 class="popup-content">Popup K</h2>
+						<h2 class="popup-content">Popup L</h2>
+					</div>
+				</div>
 			</div>
 		</div>
 	</body>
