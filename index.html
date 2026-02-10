@@ -1,118 +1,281 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Cristian Colorado | Resume</title>
-    <meta name="theme-color" content="#272f3f">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="main.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-    <link rel="shortcut icon" href="./images/atom.ico">
-  </head>
-  <body>
-    <div class="wrapper">
-      <div class="ide">
-        <div class="ide-header">
-          <span class="file">cristian-colorado.json</span>
-          <span class="left-over"></span>
-        </div>
-        <div class="ide-body">
-          <div class="lines">
-            <span class="line">22</span>
-            <span class="line">23</span>
-            <span class="line">24</span>
-            <span class="line">25</span>
-            <span class="line">26</span>
-            <span class="line">27</span>
-            <span class="line">28</span>
-            <span class="line">29</span>
-            <span class="line">30</span>
-            <span class="line">31</span>
-            <span class="line">32</span>
-            <span class="line">33</span>
-            <span class="line">34</span>
-            <span class="line">35</span>
-            <span class="line">36</span>
-            <span class="line">37</span>
-            <span class="line">38</span>
-            <span class="line">39</span>
-            <span class="line">40</span>
-            <span class="line">41</span>
-            <span class="line">42</span>
-            <span class="line h-m">43</span>
-            <span class="line h-m">44</span>
-            <span class="line h-m">45</span>
-            <span class="line h-m">46</span>
-            <span class="line h-m">47</span>
-            <span class="line h-l">48</span>
-            <span class="line h-l">49</span>
-            <span class="line h-l">50</span>
-            <span class="line h-l">51</span>
-            <span class="line h-l">52</span>
-            <span class="line h-xl">53</span>
-            <span class="line h-xl">54</span>
-            <span class="line h-xl">55</span>
-            <span class="line h-xl">56</span>
-            <span class="line h-xl">57</span>
-            <span class="line h-xxl">58</span>
-            <span class="line h-xxl">59</span>
-            <span class="line h-xxl">60</span>
-            <span class="line h-xxl">61</span>
-            <span class="line h-xxl">62</span>
-            <span class="line h-xxl">63</span>
-          </div>
-          <div class="editor">
-            <span class="line">&nbsp;</span>
-            <span class="line">{</span>
-            <span class="line t-1"> 
-              <span class="property">name</span>: <span class="value">Cristian Colorado Cervantes</span>,
-            </span>
-            <span class="line t-1"> 
-              <span class="property">title</span>: <span class="value">Senior Software Engineer</span>,
-            </span>
-            <span class="line t-1"> 
-              <span class="property">contact</span>: [
-            </span>
-            <span class="line t-2"><a target="_blank" href="https://www.linkedin.com/in/cristiancolorado/" class="value">https://www.linkedin.com/in/cristiancolorado/</a>,</span>
-            <span class="line t-2"><a target="_blank" href="https://github.com/ccoloradoc" class="value">https://github.com/ccoloradoc</a></span>
-            <span class="line t-1">],</span>
-            <span class="line t-1">
-              <span class="property">technologies</span>: [ 
-            </span>
-            <span class="line t-2">
-              <span class="value">Java SE</span>, 
-              <span class="value">JEE</span>, 
-              <span class="value">Spring</span>, 
-            </span>
-            <span class="line t-2">
-              <span class="value">CSS</span>, 
-              <span class="value">Javascript</span>, 
-              <span class="value">React</span>,
-            </span>
-            <span class="line t-2">
-              <span class="value">SQL/NoSQL</span>, 
-              <span class="value">Docker</span>, 
-              <span class="value">AWS</span>
-            </span>
-            <span class="line t-1">],</span>
-            <span class="line t-1">
-              <span class="property">certifications</span>: [ 
-            </span>
-            <span class="line t-2">
-              <span class="value">AWS Certified Cloud Practitioner</span>, 
-            </span>
-            <span class="line t-2">
-              <span class="value">Oracle Certified Professional, Java SE 8 Programmer</span>, 
-            </span>
-            <span class="line t-2">
-              <span class="value">Oracle Certified Associate, Java SE 8 Programmer</span>
-            </span>
-            <span class="line t-1">]</span>
-            <span class="line">}</span>
-            <span class="line"></span>
-          </div>
-        </div>
-      </div>  
+<html lang="en">
+<head>
+  <meta property="og:title" content="Cristian Colorado | Senior Software Engineer" />
+  <meta property="og:description" content="Senior Software Engineer specializing in cloud-native backend systems, Kubernetes, Java, and high-availability platforms for US enterprise teams." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://cristiancolorado.com" />
+  <meta property="og:image" content="https://cristiancolorado.com/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Cristian Colorado | Senior Software Engineer" />
+  <meta name="twitter:description" content="Cloud-native backend engineer delivering reliable, high-availability systems for US enterprise platforms." />
+  <meta name="description" content="Senior Software Engineer specializing in cloud-native backend systems, Kubernetes, Java, and Spring Boot. Experienced delivering high-availability, mission-critical platforms for US enterprise companies." />
+  <meta name="keywords" content="Senior Software Engineer, Cloud-Native, Kubernetes, Java, Spring Boot, High-Availability Systems, Backend Engineer, US Enterprise, Offshore Contractor Mexico" />
+  <meta name="author" content="Cristian Colorado" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Senior Software Engineer | Cloud-Native, Kubernetes, Java | US Enterprise Systems</title>
+  <style>
+    :root {
+      --bg-primary: #0a192f;
+      --bg-secondary: #020c1b;
+      --text-primary: #ccd6f6;
+      --text-secondary: #8892b0;
+      --accent: #4fd1c5;
+      --border-subtle: #112240;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 72px 24px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+
+    h2 {
+      font-size: 1.6rem;
+      margin-top: 64px;
+      margin-bottom: 24px;
+      color: var(--text-primary);
+    }
+
+    h3 {
+      color: var(--accent);
+      margin-top: 0;
+    }
+
+    p {
+      max-width: 720px;
+      color: var(--text-secondary);
+    }
+
+    .skills, .experience {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 24px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+    }
+
+    /* Fix CTA paragraph alignment on large screens */
+    .card p {
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+    }
+
+    .card h3,
+    .card p a {
+      text-align: center;
+      display: block;
+    }
+
+    ul {
+      padding-left: 20px;
+      color: var(--text-secondary);
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      margin-top: 80px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      text-align: center;
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      .container {
+        padding: 48px 20px;
+      }
+
+      h1 {
+        font-size: 1.9rem;
+      }
+
+      h2 {
+        font-size: 1.4rem;
+        margin-top: 48px;
+      }
+
+      p {
+        max-width: 100%;
+        font-size: 0.95rem;
+      }
+
+      .skills, .experience {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .card p {
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 420px) {
+      h1 {
+        font-size: 1.7rem;
+      }
+
+      h2 {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Cristian Colorado</h1>
+    
+    <h2 style="font-weight:500; color:#94a3b8; margin-top:8px;">Senior Software Engineer · Cloud-Native Backend · Kubernetes · Java · High-Availability Systems</h2>
+    
+
+    
+
+    <h2>About</h2>
+    <p>
+      Senior Software Engineer with 15+ years of experience building, modernizing, and operating
+      high-availability backend systems for US enterprise clients. Specialized in cloud-native
+      architectures, Kubernetes migrations, and payment-critical platforms. Experienced working
+      as an offshore contractor, collaborating closely with US-based stakeholders.
+    </p>
+
+    <h2>What I Help Teams With</h2>
+    <div class="skills">
+      <div class="card">
+        <h3>Modernizing Legacy Systems</h3>
+        <ul>
+          <li>Migrating monoliths to cloud-native and microservices architectures</li>
+          <li>Kubernetes adoption and containerization strategies</li>
+          <li>Reducing operational risk during large-scale migrations</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Building Reliable Backend Platforms</h3>
+        <ul>
+          <li>Designing high-availability and resilient backend services</li>
+          <li>Improving performance, scalability, and fault tolerance</li>
+          <li>Operating payment and transaction-critical systems</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Delivery & Technical Leadership</h3>
+        <ul>
+          <li>Leading and mentoring engineering teams</li>
+          <li>Clarifying requirements and technical tradeoffs with stakeholders</li>
+          <li>Improving delivery velocity through CI/CD and agile practices</li>
+        </ul>
+      </div>
     </div>
-  </body>
+
+    <h2>Core Skills</h2>
+    <div class="skills">
+      <div class="card">
+        <h3>Backend & Architecture</h3>
+        <ul>
+          <li>Java & Spring Boot</li>
+          <li>Microservices & Distributed Systems</li>
+          <li>High-Availability & Resiliency</li>
+          <li>System Design & Tradeoffs</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Cloud & DevOps</h3>
+        <ul>
+          <li>Kubernetes & Docker</li>
+          <li>AWS</li>
+          <li>CI/CD Pipelines</li>
+          <li>Observability & Monitoring</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Leadership</h3>
+        <ul>
+          <li>Technical Leadership</li>
+          <li>Mentoring Engineers</li>
+          <li>Stakeholder Communication</li>
+          <li>Agile Delivery</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Experience</h2>
+    <div class="experience">
+      <div class="card">
+        <h3>Tech Mahindra</h3>
+        <p><strong>Senior Software Engineer</strong> · 2021 – Present</p>
+        <p>
+          Working on mission-critical payment services for a large US retail platform. Focused on
+          cloud-native backend development, Kubernetes migrations, CI/CD modernization, and
+          high-availability systems.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Unosquare</h3>
+        <p><strong>Team Lead / Senior Software Engineer</strong> · 2017 – 2021</p>
+        <p>
+          Led engineering teams and contributed to the modernization of enterprise web platforms,
+          microservices architecture, and cloud-based systems for US clients.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Accenture</h3>
+        <p><strong>Software Engineer</strong> · 2012 – 2017</p>
+        <p>
+          Contributed to the design and evolution of distributed backend services supporting large-scale enterprise platforms. Focused on reliability, scalability, and clean service boundaries across Java and cloud-native environments.
+        </p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:48px; text-align:center;">
+      <h3>Interested in Working Together?</h3>
+      <p>If you’re looking for a senior backend engineer to modernize systems, improve reliability, or support critical platforms, let’s connect.</p>
+      <p>
+        <a href="https://www.linkedin.com/in/cristiancolorado/" target="_blank" style="color:#38bdf8; font-weight:600;">Connect with me on LinkedIn →</a>
+      </p>
+    </div>
+
+    <footer>
+      <p>Based in México · Working with US companies as an offshore contractor</p>
+    </footer>
+  </div>
+</body>
 </html>
