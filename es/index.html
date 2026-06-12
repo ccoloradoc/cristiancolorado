@@ -26,9 +26,9 @@
   <link rel="alternate" hreflang="es" href="https://cristiancolorado.com/es/" />
   <link rel="alternate" hreflang="x-default" href="https://cristiancolorado.com/" />
   <!-- Favicon -->
-  <link rel="icon" type="image/png" sizes="32x32" href="https://cristiancolorado.com/images/cc.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="https://cristiancolorado.com/images/cc.png" />
-  <link rel="apple-touch-icon" href="https://cristiancolorado.com/images/cc.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/cc.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/cc.png" />
+  <link rel="apple-touch-icon" href="/images/cc.png" />
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -77,6 +77,13 @@
       overflow-y: auto;
     }
 
+    .sidebar-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
     .status-badge {
       display: inline-flex;
       align-items: center;
@@ -86,7 +93,6 @@
       color: #4ade80;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      margin-bottom: 20px;
     }
 
     .status-badge::before {
@@ -197,10 +203,34 @@
       text-decoration: none;
     }
 
+    .btn-cv {
+      display: block;
+      background: transparent;
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.82rem;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-align: center;
+      border: 1px solid rgba(79, 209, 197, 0.4);
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+      margin-bottom: 20px;
+      letter-spacing: 0.02em;
+    }
+
+    .btn-cv:hover {
+      background: rgba(79, 209, 197, 0.08);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
+
     .lang-switch {
       font-size: 0.78rem;
       color: var(--text-secondary);
-      text-align: center;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .lang-switch a {
@@ -429,51 +459,73 @@
         position: static;
         width: 100%;
         height: auto;
-        padding: 48px 32px 40px;
+        padding: 36px 28px 28px;
         border-right: none;
         border-bottom: 1px solid var(--border-subtle);
       }
 
       nav {
         flex-direction: row;
-        flex-wrap: wrap;
-        column-gap: 24px;
-        row-gap: 4px;
-        margin-top: 36px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 6px;
+        margin-top: 28px;
+        padding-bottom: 2px;
+      }
+
+      nav::-webkit-scrollbar { display: none; }
+
+      .nav-link {
+        white-space: nowrap;
+        padding: 6px 14px;
+        background: var(--border-subtle);
+        border-radius: 20px;
+        font-size: 0.68rem;
       }
 
       .nav-link::before { display: none; }
 
-      .sidebar-footer {
-        margin-top: 36px;
-        display: flex;
-        align-items: center;
-        gap: 28px;
+      .nav-link.active,
+      .nav-link:hover {
+        background: rgba(79, 209, 197, 0.12);
+        color: var(--accent);
       }
 
-      .btn-linkedin {
+      .sidebar-footer {
+        margin-top: 24px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .btn-linkedin, .btn-cv {
         margin-bottom: 0;
         white-space: nowrap;
       }
 
+      section { margin-bottom: 64px; }
+
       .content {
         margin-left: 0;
-        padding: 56px 32px 80px;
+        padding: 48px 28px 72px;
         max-width: 100%;
       }
     }
 
     @media (max-width: 600px) {
-      .sidebar { padding: 40px 24px 36px; }
-      .content { padding: 48px 24px 72px; }
+      .sidebar { padding: 28px 20px 24px; }
+      .sidebar h1 { font-size: 1.6rem; }
+      .content { padding: 40px 20px 64px; }
 
       .sidebar-footer {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 20px;
+        align-items: stretch;
+        gap: 10px;
       }
 
-      .btn-linkedin { width: 100%; }
+      .btn-linkedin, .btn-cv { width: 100%; }
     }
   </style>
 </head>
@@ -483,16 +535,24 @@
     <!-- ── SIDEBAR ── -->
     <aside class="sidebar">
       <div>
-        <div class="status-badge">Disponible para oportunidades</div>
+        <div class="sidebar-topbar">
+          <div class="status-badge">Disponible para oportunidades</div>
+          <div class="lang-switch">
+            <a href="/" aria-label="English version">EN</a>
+            &nbsp;|&nbsp;
+            <a href="/es" aria-label="Versión en Español" aria-current="page">ES</a>
+          </div>
+        </div>
         <h1>Cristian Colorado</h1>
         <p class="job-title">Senior Software Engineer</p>
-        <p class="tagline">Construyendo sistemas backend de alta disponibilidad para plataformas empresariales de EE.UU.</p>
+        <p class="tagline">Sistemas backend críticos de pagos y alta disponibilidad para empresas Fortune 500 de EE.UU.</p>
 
         <nav aria-label="Secciones de la página">
           <a href="#sobre-mi" class="nav-link active">Sobre mí</a>
           <a href="#experiencia-tecnica" class="nav-link">Experiencia técnica</a>
           <a href="#habilidades" class="nav-link">Habilidades</a>
           <a href="#trayectoria" class="nav-link">Trayectoria</a>
+          <a href="#reconocimientos" class="nav-link">Certificaciones</a>
         </nav>
       </div>
 
@@ -500,11 +560,9 @@
         <a href="https://www.linkedin.com/in/cristiancolorado/" target="_blank" rel="noopener" class="btn-linkedin">
           Conectar en LinkedIn →
         </a>
-        <div class="lang-switch">
-          <a href="/" aria-label="English version">EN</a>
-          &nbsp;|&nbsp;
-          <a href="/es" aria-label="Versión en Español" aria-current="page">ES</a>
-        </div>
+        <a href="/cristian.colorado.cv.pdf" download class="btn-cv">
+          Descargar CV
+        </a>
       </div>
     </aside>
 
@@ -515,13 +573,14 @@
         <h2>Sobre mí</h2>
         <p>
           Ingeniero de software senior con más de 15 años de experiencia construyendo, modernizando
-          y operando sistemas backend de alta disponibilidad para empresas en Estados Unidos.
-          Especializado en arquitecturas cloud-native, migraciones a Kubernetes y plataformas
-          críticas de pagos.
+          y operando sistemas backend para empresas de EE.UU. en los sectores retail, medios y
+          energía. Especializado en arquitecturas cloud-native, migraciones a Kubernetes, plataformas
+          críticas de pagos y sistemas reactivos orientados a eventos.
         </p>
         <p>
-          Amplia experiencia colaborando como contratista offshore desde México, trabajando
-          directamente con stakeholders y equipos distribuidos en EE.UU.
+          Contratista offshore y líder técnico para organizaciones como GE, Disney y Harvard.
+          Colaborador fluido con equipos distribuidos en EE.UU. — y un MBA en Emprendimiento que
+          complementa la profundidad técnica con visión de negocio.
         </p>
       </section>
 
@@ -547,7 +606,7 @@
           <div class="expertise-card">
             <h3>Liderazgo Técnico</h3>
             <ul>
-              <li>Liderazgo y mentoría de ingenieros</li>
+              <li>Liderazgo y mentoría de equipos de hasta 10 ingenieros</li>
               <li>Comunicación técnica clara con stakeholders</li>
               <li>Mejora continua de procesos de entrega y calidad</li>
             </ul>
@@ -567,6 +626,9 @@
             <span class="pill">Alta Disponibilidad</span>
             <span class="pill">Diseño de Sistemas</span>
             <span class="pill">REST APIs</span>
+            <span class="pill">Programación Reactiva</span>
+            <span class="pill">Arquitectura Orientada a Eventos</span>
+            <span class="pill">Sistemas de Pago</span>
           </div>
         </div>
         <div class="skill-group">
@@ -578,6 +640,15 @@
             <span class="pill">CI/CD</span>
             <span class="pill">Observabilidad</span>
             <span class="pill">Infrastructure as Code</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-label">Bases de Datos</div>
+          <div class="pills">
+            <span class="pill">MySQL</span>
+            <span class="pill">Oracle</span>
+            <span class="pill">MongoDB</span>
+            <span class="pill">PostgreSQL</span>
           </div>
         </div>
         <div class="skill-group">
@@ -607,9 +678,11 @@
                 <span class="timeline-date">2021 – Presente</span>
               </div>
               <p>
-                Desarrollo y operación de servicios de pago críticos para una gran plataforma de
-                retail en EE.UU. Enfocado en backend cloud-native, migraciones a Kubernetes,
-                modernización de CI/CD y sistemas de alta disponibilidad.
+                Diseño y operación de servicios de pago críticos para un retailer Fortune 500 de
+                EE.UU., procesando altos volúmenes de transacciones bajo requisitos estrictos de
+                cero tiempo de inactividad. Migración de servicios heredados a Kubernetes y adopción
+                de arquitectura reactiva y orientada a eventos para mejorar la resiliencia bajo
+                carga máxima.
               </p>
             </div>
           </div>
@@ -626,9 +699,9 @@
                 <span class="timeline-date">2017 – 2021</span>
               </div>
               <p>
-                Lideré equipos de ingeniería y contribuí a la modernización de plataformas
-                empresariales, arquitecturas de microservicios y sistemas cloud para
-                clientes en EE.UU.
+                Líder técnico en la modernización de plataformas empresariales para Harvard,
+                dirigiendo un equipo de hasta 10 ingenieros. Migración de monolitos a
+                microservicios y entrega de sistemas cloud para clientes en EE.UU.
               </p>
             </div>
           </div>
@@ -642,16 +715,33 @@
               <h3>Accenture</h3>
               <div class="timeline-meta">
                 <span class="timeline-role">Software Engineer</span>
-                <span class="timeline-date">2012 – 2017</span>
+                <span class="timeline-date">2012 – 2014</span>
               </div>
               <p>
-                Participé en el diseño y evolución de servicios backend distribuidos para
-                plataformas empresariales a gran escala, con enfoque en confiabilidad,
-                escalabilidad y límites claros de servicio.
+                Ingeniero backend en un sistema empresarial de Disney para procesamiento de
+                metadatos multimedia a gran escala, redistribuidos a proveedores en todo el mundo.
               </p>
             </div>
           </div>
 
+        </div>
+      </section>
+
+      <section id="reconocimientos">
+        <h2>Certificaciones y Logros</h2>
+        <div class="skill-group">
+          <div class="skill-group-label">Certificaciones Oracle</div>
+          <div class="pills">
+            <span class="pill">OCP Java SE 8</span>
+            <span class="pill">OCP Java SE 6</span>
+            <span class="pill">OCA Java SE 8</span>
+          </div>
+        </div>
+        <div class="skill-group" style="margin-bottom:0">
+          <div class="skill-group-label">Premios</div>
+          <div class="pills">
+            <span class="pill">🏆 Mejor App — AT&amp;T Hackathon · Guadalajara</span>
+          </div>
         </div>
       </section>
 

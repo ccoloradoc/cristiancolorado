@@ -4,7 +4,7 @@
   <meta property="og:title" content="Cristian Colorado | Senior Software Engineer" />
   <meta property="og:description" content="Senior Software Engineer specializing in cloud-native backend systems, Kubernetes, Java, and high-availability platforms for US enterprise teams." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://cristiancolorado.com" />
+  <meta property="og:url" content="https://cristiancolorado.com/" />
   <meta property="og:image" content="https://cristiancolorado.com/images/og.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://cristiancolorado.com/images/og.png" />
@@ -21,9 +21,9 @@
   <link rel="alternate" hreflang="es" href="https://cristiancolorado.com/es/" />
   <link rel="alternate" hreflang="x-default" href="https://cristiancolorado.com/" />
   <!-- Favicon -->
-  <link rel="icon" type="image/png" sizes="32x32" href="https://cristiancolorado.com/images/cc.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="https://cristiancolorado.com/images/cc.png" />
-  <link rel="apple-touch-icon" href="https://cristiancolorado.com/images/cc.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/cc.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/cc.png" />
+  <link rel="apple-touch-icon" href="/images/cc.png" />
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -72,6 +72,13 @@
       overflow-y: auto;
     }
 
+    .sidebar-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
     .status-badge {
       display: inline-flex;
       align-items: center;
@@ -81,7 +88,6 @@
       color: #4ade80;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      margin-bottom: 20px;
     }
 
     .status-badge::before {
@@ -192,10 +198,34 @@
       text-decoration: none;
     }
 
+    .btn-cv {
+      display: block;
+      background: transparent;
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.82rem;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-align: center;
+      border: 1px solid rgba(79, 209, 197, 0.4);
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+      margin-bottom: 20px;
+      letter-spacing: 0.02em;
+    }
+
+    .btn-cv:hover {
+      background: rgba(79, 209, 197, 0.08);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
+
     .lang-switch {
       font-size: 0.78rem;
       color: var(--text-secondary);
-      text-align: center;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .lang-switch a {
@@ -424,51 +454,73 @@
         position: static;
         width: 100%;
         height: auto;
-        padding: 48px 32px 40px;
+        padding: 36px 28px 28px;
         border-right: none;
         border-bottom: 1px solid var(--border-subtle);
       }
 
       nav {
         flex-direction: row;
-        flex-wrap: wrap;
-        column-gap: 24px;
-        row-gap: 4px;
-        margin-top: 36px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 6px;
+        margin-top: 28px;
+        padding-bottom: 2px;
+      }
+
+      nav::-webkit-scrollbar { display: none; }
+
+      .nav-link {
+        white-space: nowrap;
+        padding: 6px 14px;
+        background: var(--border-subtle);
+        border-radius: 20px;
+        font-size: 0.68rem;
       }
 
       .nav-link::before { display: none; }
 
-      .sidebar-footer {
-        margin-top: 36px;
-        display: flex;
-        align-items: center;
-        gap: 28px;
+      .nav-link.active,
+      .nav-link:hover {
+        background: rgba(79, 209, 197, 0.12);
+        color: var(--accent);
       }
 
-      .btn-linkedin {
+      .sidebar-footer {
+        margin-top: 24px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .btn-linkedin, .btn-cv {
         margin-bottom: 0;
         white-space: nowrap;
       }
 
+      section { margin-bottom: 64px; }
+
       .content {
         margin-left: 0;
-        padding: 56px 32px 80px;
+        padding: 48px 28px 72px;
         max-width: 100%;
       }
     }
 
     @media (max-width: 600px) {
-      .sidebar { padding: 40px 24px 36px; }
-      .content { padding: 48px 24px 72px; }
+      .sidebar { padding: 28px 20px 24px; }
+      .sidebar h1 { font-size: 1.6rem; }
+      .content { padding: 40px 20px 64px; }
 
       .sidebar-footer {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 20px;
+        align-items: stretch;
+        gap: 10px;
       }
 
-      .btn-linkedin { width: 100%; }
+      .btn-linkedin, .btn-cv { width: 100%; }
     }
   </style>
 </head>
@@ -478,16 +530,24 @@
     <!-- ── SIDEBAR ── -->
     <aside class="sidebar">
       <div>
-        <div class="status-badge">Open to opportunities</div>
+        <div class="sidebar-topbar">
+          <div class="status-badge">Open to opportunities</div>
+          <div class="lang-switch">
+            <a href="/" aria-label="English version" aria-current="page">EN</a>
+            &nbsp;|&nbsp;
+            <a href="/es" aria-label="Versión en Español">ES</a>
+          </div>
+        </div>
         <h1>Cristian Colorado</h1>
         <p class="job-title">Senior Software Engineer</p>
-        <p class="tagline">Building high-availability backend systems for US enterprise platforms.</p>
+        <p class="tagline">Building payment-critical, high-availability backend systems for Fortune 500 US companies.</p>
 
         <nav aria-label="Page sections">
           <a href="#about" class="nav-link active">About</a>
           <a href="#expertise" class="nav-link">Expertise</a>
           <a href="#skills" class="nav-link">Skills</a>
           <a href="#experience" class="nav-link">Experience</a>
+          <a href="#recognition" class="nav-link">Certifications</a>
         </nav>
       </div>
 
@@ -495,11 +555,9 @@
         <a href="https://www.linkedin.com/in/cristiancolorado/" target="_blank" rel="noopener" class="btn-linkedin">
           Connect on LinkedIn →
         </a>
-        <div class="lang-switch">
-          <a href="/" aria-label="English version" aria-current="page">EN</a>
-          &nbsp;|&nbsp;
-          <a href="/es" aria-label="Versión en Español">ES</a>
-        </div>
+        <a href="/cristian.colorado.cv.pdf" download class="btn-cv">
+          Download CV
+        </a>
       </div>
     </aside>
 
@@ -510,12 +568,15 @@
         <h2>About</h2>
         <p>
           Senior Software Engineer with 15+ years of experience building, modernizing, and operating
-          high-availability backend systems for US enterprise clients. Specialized in cloud-native
-          architectures, Kubernetes migrations, and payment-critical platforms.
+          backend systems for US enterprise companies in retail, media, and energy. Specialized in
+          cloud-native architectures, Kubernetes migrations, payment-critical platforms, and
+          reactive event-driven systems.
         </p>
         <p>
-          Experienced working as an offshore contractor from México, collaborating closely with
-          US-based stakeholders across distributed teams.
+          Long-tenured offshore contractor and technical lead for organizations including GE, Disney,
+          and Harvard. Fluent collaborator with US-based product owners, architects, and distributed
+          engineering teams — and an MBA in Entrepreneurship that bridges technical depth with
+          business context.
         </p>
       </section>
 
@@ -541,7 +602,7 @@
           <div class="expertise-card">
             <h3>Delivery &amp; Technical Leadership</h3>
             <ul>
-              <li>Leading and mentoring engineering teams</li>
+              <li>Leading and mentoring engineering teams of up to 10 engineers</li>
               <li>Clarifying requirements and technical tradeoffs with stakeholders</li>
               <li>Improving delivery velocity through CI/CD and agile practices</li>
             </ul>
@@ -557,8 +618,11 @@
             <span class="pill">Java</span>
             <span class="pill">Spring Boot</span>
             <span class="pill">Microservices</span>
+            <span class="pill">Reactive Programming</span>
+            <span class="pill">Event-Driven Architecture</span>
             <span class="pill">Distributed Systems</span>
             <span class="pill">High Availability</span>
+            <span class="pill">Payment Systems</span>
             <span class="pill">System Design</span>
             <span class="pill">REST APIs</span>
           </div>
@@ -572,6 +636,15 @@
             <span class="pill">CI/CD Pipelines</span>
             <span class="pill">Observability</span>
             <span class="pill">Infrastructure as Code</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-label">Databases</div>
+          <div class="pills">
+            <span class="pill">MySQL</span>
+            <span class="pill">Oracle</span>
+            <span class="pill">MongoDB</span>
+            <span class="pill">PostgreSQL</span>
           </div>
         </div>
         <div class="skill-group">
@@ -601,9 +674,9 @@
                 <span class="timeline-date">2021 – Present</span>
               </div>
               <p>
-                Working on mission-critical payment services for a large US retail platform. Focused on
-                cloud-native backend development, Kubernetes migrations, CI/CD modernization, and
-                high-availability systems.
+                Backend engineer on payment services for a Fortune 500 US grocery retailer. Focused on
+                cloud-native development, Kubernetes migrations, reactive event-driven architecture,
+                CI/CD modernization, and zero-downtime high-availability systems.
               </p>
             </div>
           </div>
@@ -620,8 +693,9 @@
                 <span class="timeline-date">2017 – 2021</span>
               </div>
               <p>
-                Led engineering teams and contributed to the modernization of enterprise web platforms,
-                microservices architecture, and cloud-based systems for US clients.
+                Technical lead for enterprise platform modernization at Harvard, leading a team of up
+                to 10 engineers. Drove monolith-to-microservices migrations and delivered cloud-based
+                systems for US clients including Harvard University.
               </p>
             </div>
           </div>
@@ -635,16 +709,33 @@
               <h3>Accenture</h3>
               <div class="timeline-meta">
                 <span class="timeline-role">Software Engineer</span>
-                <span class="timeline-date">2012 – 2017</span>
+                <span class="timeline-date">2012 – 2014</span>
               </div>
               <p>
-                Contributed to the design and evolution of distributed backend services supporting
-                large-scale enterprise platforms. Focused on reliability, scalability, and clean
-                service boundaries across Java and cloud-native environments.
+                Backend engineer on a Disney enterprise system processing media metadata at scale
+                across multiple content sources for redistribution to vendors worldwide.
               </p>
             </div>
           </div>
 
+        </div>
+      </section>
+
+      <section id="recognition">
+        <h2>Certifications &amp; Awards</h2>
+        <div class="skill-group">
+          <div class="skill-group-label">Oracle Java Certifications</div>
+          <div class="pills">
+            <span class="pill">OCP Java SE 8</span>
+            <span class="pill">OCP Java SE 6</span>
+            <span class="pill">OCA Java SE 8</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-label">Awards</div>
+          <div class="pills">
+            <span class="pill">🏆 Best Overall App — AT&amp;T Hackathon, Guadalajara</span>
+          </div>
         </div>
       </section>
 

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cristian Colorado Cervantes — CV</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --accent:       #0d9488;
+      --accent-light: #f0fdfa;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted:   #94a3b8;
+      --border:       #e2e8f0;
+      --page-width:   780px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-primary);
+      background: #f8fafc;
+    }
+
+    .page {
+      max-width: var(--page-width);
+      margin: 32px auto;
+      background: #fff;
+      padding: 48px 52px;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.06);
+    }
+
+    /* ── HEADER ── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--accent);
+      margin-bottom: 24px;
+    }
+
+    .header-left h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.3px;
+      line-height: 1.15;
+    }
+
+    .header-left .title {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--accent);
+      margin-top: 5px;
+    }
+
+    .header-right {
+      text-align: right;
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      flex-shrink: 0;
+    }
+
+    .header-right a { color: var(--accent); text-decoration: none; }
+
+    /* ── SECTIONS ── */
+    .section { margin-bottom: 22px; }
+
+    .section-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── SUMMARY ── */
+    .summary p {
+      color: var(--text-secondary);
+      font-size: 12.5px;
+    }
+
+    /* ── SKILLS ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px 20px;
+    }
+
+    .skill-group-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 3px;
+    }
+
+    .skill-group-values {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ── EXPERIENCE ── */
+    .job {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .job:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .job-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 1px;
+    }
+
+    .job-company {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .client-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--accent);
+      background: var(--accent-light);
+      border: 1px solid #99f6e4;
+      border-radius: 4px;
+      padding: 1px 7px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    .job-dates {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .job-role {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 5px;
+    }
+
+    .job ul {
+      padding-left: 14px;
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    .job ul li { margin-bottom: 2px; }
+
+    /* ── EDUCATION / CERTS ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .edu-item { margin-bottom: 8px; }
+    .edu-item:last-child { margin-bottom: 0; }
+    .edu-school { font-weight: 600; font-size: 12.5px; }
+    .edu-degree { font-size: 12px; color: var(--text-secondary); }
+    .edu-years  { font-size: 11px; color: var(--text-muted); }
+    .cert-item  { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
+    .award-name { font-size: 12px; font-weight: 600; margin-top: 8px; }
+    .award-detail { font-size: 11.5px; color: var(--text-secondary); }
+
+    /* ── LANGUAGES ── */
+    .lang-list {
+      display: flex;
+      gap: 24px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .lang-list span { font-weight: 600; color: var(--text-primary); }
+
+    /* ── PRINT ── */
+    @media print {
+      body { background: white; }
+      .page { margin: 0; padding: 32px 44px; box-shadow: none; border-radius: 0; max-width: 100%; }
+      .job { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <h1>Cristian Colorado Cervantes</h1>
+      <div class="title">Senior Software Engineer &mdash; Cloud-Native &middot; Java &middot; Kubernetes &middot; High-Availability Systems</div>
+    </div>
+    <div class="header-right">
+      Zapopan, Jalisco, México<br>
+      ccoloradoc@gmail.com<br>
+      <a href="https://www.linkedin.com/in/cristiancolorado/">linkedin.com/in/cristiancolorado</a><br>
+      <a href="https://cristiancolorado.com">cristiancolorado.com</a>
+    </div>
+  </header>
+
+  <!-- SUMMARY -->
+  <section class="section summary">
+    <div class="section-title">Summary</div>
+    <p>Senior Software Engineer with 15+ years building, modernizing, and operating backend systems for US enterprise companies in retail, media, and energy. Expert in Java, Spring Boot, Kubernetes, and AWS — with a track record of migrating critical systems into scalable, high-availability architectures. Offshore contractor and technical lead for GE, Disney, and Harvard; fluent collaborator with US-based teams across time zones.</p>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="section">
+    <div class="section-title">Skills</div>
+    <div class="skills-grid">
+      <div>
+        <div class="skill-group-label">Backend &amp; Architecture</div>
+        <div class="skill-group-values">Java · Spring Boot · Microservices · Reactive Programming · REST APIs · Event-Driven Architecture · High-Availability · System Design</div>
+      </div>
+      <div>
+        <div class="skill-group-label">Cloud &amp; DevOps</div>
+        <div class="skill-group-values">Kubernetes · Docker · AWS · CI/CD · Jenkins · Observability · Infrastructure as Code</div>
+        <br>
+        <div class="skill-group-label">Databases</div>
+        <div class="skill-group-values">MySQL · Oracle · MongoDB · PostgreSQL</div>
+      </div>
+      <div>
+        <div class="skill-group-label">Leadership &amp; Process</div>
+        <div class="skill-group-values">Technical Leadership · Team Mentoring · Stakeholder Communication · Agile / Scrum · Solution Architecture</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="section">
+    <div class="section-title">Experience</div>
+
+    <!-- Tech Mahindra -->
+    <div class="job">
+      <div class="job-header">
+        <div class="job-company">Tech Mahindra <span class="client-badge">Fortune 500 US grocery retailer</span></div>
+        <div class="job-dates">Apr 2021 – Present</div>
+      </div>
+      <div class="job-role">Senior Software Engineer &middot; Guadalajara, México</div>
+      <ul>
+        <li>Design and maintain cloud-native payment services in Java and Spring Boot processing high transaction volumes at peak retail scale, under strict zero-downtime requirements</li>
+        <li>Lead Kubernetes migration of legacy services and drive adoption of reactive, event-driven architecture to improve resilience under load</li>
+        <li>Modernize CI/CD pipelines and lead root-cause analysis on high-priority production incidents, implementing long-term fixes to prevent recurrence</li>
+        <li>Partner with US-based product owners and architects on design decisions across a fully distributed team</li>
+      </ul>
+    </div>
+
+    <!-- Unosquare -->
+    <div class="job">
+      <div class="job-header">
+        <div class="job-company">Unosquare <span class="client-badge">Harvard University</span></div>
+        <div class="job-dates">Apr 2017 – Apr 2021</div>
+      </div>
+      <div class="job-role">Team Lead | Senior Software Engineer &middot; Zapopan, México</div>
+      <ul>
+        <li>Led and mentored a team of up to 10 engineers delivering enterprise platform modernization for Harvard's publishing and content business units</li>
+        <li>Drove monolith-to-microservices migration, redesigned front-end subscription flows, and owned architecture decisions on scalability and deployment strategy</li>
+        <li>Integrated third-party marketing and analytics tools and implemented A/B testing infrastructure to support data-driven decisions</li>
+        <li>Partnered directly with Harvard stakeholders and product owners to align requirements and ensure reliable delivery</li>
+      </ul>
+    </div>
+
+    <!-- WeDevelop -->
+    <div class="job">
+      <div class="job-header">
+        <div class="job-company">WeDevelop <em style="font-weight:400; font-size:12px; color:var(--text-muted)">(Founder)</em></div>
+        <div class="job-dates">Sep 2015 – Apr 2017</div>
+      </div>
+      <div class="job-role">Solution Architect | Technical Lead &middot; San Luis Potosí, México</div>
+      <ul>
+        <li>Founded a software consulting boutique after an MBA in Madrid; owned full project lifecycle across multiple concurrent client engagements</li>
+        <li>Managed client relationships, delivered architectural proposals, coordinated in-house and remote developers, and established CI and cloud environments from scratch</li>
+      </ul>
+    </div>
+
+    <!-- Accenture -->
+    <div class="job">
+      <div class="job-header">
+        <div class="job-company">Accenture <span class="client-badge">Disney</span></div>
+        <div class="job-dates">Oct 2012 – Aug 2014</div>
+      </div>
+      <div class="job-role">Senior Software Engineer &middot; Monterrey, México</div>
+      <ul>
+        <li>Built integrations on a Disney enterprise intranet that processed vendor-proprietary XML media metadata at scale for redistribution to vendors worldwide</li>
+        <li>Hardened application security against OWASP vulnerabilities and delivered ongoing front-end improvements</li>
+      </ul>
+    </div>
+
+    <!-- Softtek -->
+    <div class="job">
+      <div class="job-header">
+        <div class="job-company">Softtek <span class="client-badge">GE</span></div>
+        <div class="job-dates">May 2008 – Oct 2012</div>
+      </div>
+      <div class="job-role">Team Lead → Software Engineer &middot; Monterrey, México / Albany, NY / Houston, TX</div>
+      <ul>
+        <li>Progressed from Software Engineer to Team Lead over 4+ years; deployed on-site at GE (Albany) and client facilities in Houston for a combined 20+ months</li>
+        <li>Led integration of GE's sales application suite with a new enterprise system, managing a team of six engineers and owning requirements, design, and delivery</li>
+        <li>Designed and executed Disaster Recovery Plans during Hurricane Ike (2008), maintaining continuity for Houston data centers; maintained full SLA compliance throughout</li>
+      </ul>
+    </div>
+
+  </section>
+
+  <!-- EDUCATION + CERTS -->
+  <section class="section">
+    <div class="section-title">Education &amp; Certifications</div>
+    <div class="two-col">
+      <div>
+        <div class="edu-item">
+          <div class="edu-school">Universidad Carlos III de Madrid</div>
+          <div class="edu-degree">Master's — Entrepreneurship &amp; Business Creation</div>
+          <div class="edu-years">2014 – 2015</div>
+        </div>
+        <div class="edu-item">
+          <div class="edu-school">Universidad Autónoma de San Luis Potosí</div>
+          <div class="edu-degree">B.Eng., Computer Science</div>
+          <div class="edu-years">2002 – 2007</div>
+        </div>
+      </div>
+      <div>
+        <div class="cert-item">Oracle Certified Professional, Java SE 8 Programmer</div>
+        <div class="cert-item">Oracle Certified Professional, Java SE 6 Programmer</div>
+        <div class="cert-item">Oracle Certified Associate, Java SE 8 Programmer</div>
+        <div class="award-name">&#127942; Best Overall App — AT&amp;T Hackathon</div>
+        <div class="award-detail">Guadalajara, México</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LANGUAGES -->
+  <section class="section" style="margin-bottom:0">
+    <div class="section-title">Languages</div>
+    <div class="lang-list">
+      <div><span>Spanish</span> — Native</div>
+      <div><span>English</span> — Professional working proficiency</div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
