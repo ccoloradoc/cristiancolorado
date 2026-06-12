@@ -4,14 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Senior Software Engineer especializado en sistemas backend cloud-native, Kubernetes, Java y plataformas de alta disponibilidad para empresas de EE.UU." />
+  <meta name="keywords" content="Senior Software Engineer, Cloud-Native, Kubernetes, Java, Spring Boot, Alta Disponibilidad, Backend Engineer, Empresas EE.UU., Contratista Offshore México" />
   <meta name="author" content="Cristian Colorado" />
 
   <!-- Open Graph -->
   <meta property="og:title" content="Cristian Colorado | Senior Software Engineer" />
   <meta property="og:description" content="Ingeniero de software senior especializado en sistemas backend cloud-native, Kubernetes y plataformas críticas de alta disponibilidad." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://cristiancolorado.com/es" />
+  <meta property="og:url" content="https://cristiancolorado.com/es/" />
   <meta property="og:image" content="https://cristiancolorado.com/images/og.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://cristiancolorado.com/images/og.png" />
+  <meta name="twitter:title" content="Cristian Colorado | Senior Software Engineer" />
+  <meta name="twitter:description" content="Ingeniero backend cloud-native con experiencia en sistemas de alta disponibilidad para plataformas empresariales de EE.UU." />
 
   <title>Cristian Colorado | Senior Software Engineer</title>
   <link rel="canonical" href="https://cristiancolorado.com/es/" />
@@ -25,8 +32,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg-primary: #0a192f;
@@ -35,7 +41,12 @@
       --text-secondary: #8892b0;
       --accent: #4fd1c5;
       --border-subtle: #112240;
+      --sidebar-width: 320px;
     }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -45,57 +56,204 @@
       line-height: 1.7;
     }
 
-    .container {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 72px 24px;
+    /* ── LAYOUT ── */
+    .layout {
+      display: flex;
+      min-height: 100vh;
     }
 
-    h1 {
-      font-size: 2.2rem;
-      margin-bottom: 4px;
+    /* ── SIDEBAR ── */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      padding: 72px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px solid var(--border-subtle);
+      overflow-y: auto;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #4ade80;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .status-badge::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: #4ade80;
+      border-radius: 50%;
+      flex-shrink: 0;
+      animation: pulse 2.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); }
+      50% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(74, 222, 128, 0); }
+    }
+
+    .sidebar h1 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      margin: 0 0 6px;
+      color: var(--text-primary);
+      line-height: 1.15;
+    }
+
+    .sidebar .job-title {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin: 0 0 20px;
+    }
+
+    .sidebar .tagline {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.65;
+      max-width: 220px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      margin-top: 52px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 7px 0;
+      transition: color 0.2s;
+    }
+
+    .nav-link::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: currentColor;
+      transition: width 0.25s ease, background 0.25s ease;
+      flex-shrink: 0;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .nav-link.active::before,
+    .nav-link:hover::before {
+      width: 48px;
+      background: var(--accent);
+    }
+
+    /* ── SIDEBAR FOOTER ── */
+    .sidebar-footer {
+      margin-top: 48px;
+    }
+
+    .btn-linkedin {
+      display: block;
+      background: var(--accent);
+      color: #0a192f;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-decoration: none;
+      padding: 13px 20px;
+      border-radius: 8px;
+      text-align: center;
+      transition: opacity 0.2s, transform 0.15s;
+      margin-bottom: 20px;
+      letter-spacing: 0.02em;
+    }
+
+    .btn-linkedin:hover {
+      opacity: 0.88;
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
+
+    .lang-switch {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      text-align: center;
+    }
+
+    .lang-switch a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .lang-switch a:hover,
+    .lang-switch a[aria-current="page"] {
+      color: var(--accent);
+    }
+
+    /* ── MAIN CONTENT ── */
+    .content {
+      margin-left: var(--sidebar-width);
+      padding: 72px 64px 96px;
+      max-width: 760px;
+    }
+
+    section {
+      margin-bottom: 96px;
     }
 
     h2 {
-      font-size: 1.6rem;
-      margin-top: 64px;
-      margin-bottom: 24px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
       color: var(--text-primary);
+      margin: 0 0 36px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      white-space: nowrap;
     }
 
-    h3 {
-      color: var(--accent);
-      margin-top: 0;
+    h2::after {
+      content: '';
+      display: block;
+      height: 1px;
+      flex: 1;
+      background: var(--border-subtle);
     }
 
     p {
-      max-width: 720px;
       color: var(--text-secondary);
-    }
-
-    .expertise {
-      margin-top: 8px;
+      margin: 0 0 16px;
       font-size: 0.95rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--accent);
-      font-weight: 500;
-      opacity: 0.85;
     }
 
-    .skills, .experience {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 24px;
-      margin-top: 32px;
-    }
-
-    .card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      padding: 24px;
-    }
+    p:last-child { margin-bottom: 0; }
 
     a {
       color: var(--accent);
@@ -103,117 +261,418 @@
       font-weight: 500;
     }
 
-    footer {
-      margin-top: 80px;
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      text-align: center;
+    a:hover { text-decoration: underline; }
+
+    /* ── EXPERTISE CARDS ── */
+    .expertise-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
 
-    @media (max-width: 768px) {
-      .container {
-        padding: 48px 20px;
+    .expertise-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 22px 24px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .expertise-card:hover {
+      border-color: rgba(79, 209, 197, 0.4);
+      transform: translateX(6px);
+    }
+
+    .expertise-card h3 {
+      color: var(--accent);
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin: 0 0 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .expertise-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+    }
+
+    .expertise-card ul li {
+      margin-bottom: 4px;
+    }
+
+    /* ── SKILL PILLS ── */
+    .skill-group {
+      margin-bottom: 28px;
+    }
+
+    .skill-group:last-child { margin-bottom: 0; }
+
+    .skill-group-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill {
+      background: rgba(79, 209, 197, 0.08);
+      color: var(--accent);
+      border: 1px solid rgba(79, 209, 197, 0.22);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── TIMELINE ── */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 24px;
+    }
+
+    .timeline-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+      width: 14px;
+    }
+
+    .timeline-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(79, 209, 197, 0.2);
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    .timeline-line {
+      width: 1px;
+      flex: 1;
+      background: var(--border-subtle);
+      margin: 10px 0;
+    }
+
+    .timeline-item:last-child .timeline-line {
+      display: none;
+    }
+
+    .timeline-body {
+      flex: 1;
+      padding-bottom: 40px;
+    }
+
+    .timeline-item:last-child .timeline-body {
+      padding-bottom: 0;
+    }
+
+    .timeline-body h3 {
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+    }
+
+    .timeline-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .timeline-role {
+      font-size: 0.85rem;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .timeline-date {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      background: var(--border-subtle);
+      padding: 2px 10px;
+      border-radius: 999px;
+    }
+
+    .timeline-body p {
+      font-size: 0.88rem;
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 1024px) {
+      .layout {
+        flex-direction: column;
       }
 
-      h1 {
-        font-size: 1.9rem;
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        padding: 48px 32px 40px;
+        border-right: none;
+        border-bottom: 1px solid var(--border-subtle);
       }
 
-      h2 {
-        font-size: 1.4rem;
-        margin-top: 48px;
+      nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        column-gap: 24px;
+        row-gap: 4px;
+        margin-top: 36px;
       }
 
-      .skills, .experience {
-        grid-template-columns: 1fr;
+      .nav-link::before { display: none; }
+
+      .sidebar-footer {
+        margin-top: 36px;
+        display: flex;
+        align-items: center;
+        gap: 28px;
       }
+
+      .btn-linkedin {
+        margin-bottom: 0;
+        white-space: nowrap;
+      }
+
+      .content {
+        margin-left: 0;
+        padding: 56px 32px 80px;
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .sidebar { padding: 40px 24px 36px; }
+      .content { padding: 48px 24px 72px; }
+
+      .sidebar-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+      }
+
+      .btn-linkedin { width: 100%; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Cristian Colorado</h1>
-    <h2 style="font-weight:500; color:#94a3b8; margin-top:8px;">Senior Software Engineer</h2>
+  <div class="layout">
 
-    <div class="expertise">
-      Cloud-Native & Kubernetes · Java · Spring Boot · Sistemas de Alta Disponibilidad · Plataformas Críticas para Empresas de EE.UU.
-    </div>
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar">
+      <div>
+        <div class="status-badge">Disponible para oportunidades</div>
+        <h1>Cristian Colorado</h1>
+        <p class="job-title">Senior Software Engineer</p>
+        <p class="tagline">Construyendo sistemas backend de alta disponibilidad para plataformas empresariales de EE.UU.</p>
 
-    <h2>Sobre mí</h2>
-    <p>
-      Ingeniero de software senior con más de 15 años de experiencia construyendo, modernizando y operando sistemas backend de alta disponibilidad para empresas en Estados Unidos. Especializado en arquitecturas cloud-native, migraciones a Kubernetes y plataformas críticas de pagos. Amplia experiencia colaborando como contratista offshore con equipos distribuidos.
-    </p>
-
-    <h2>Cómo ayudo a los equipos</h2>
-    <div class="skills">
-      <div class="card">
-        <h3>Modernización de Sistemas</h3>
-        <ul>
-          <li>Migración de monolitos a arquitecturas cloud-native y microservicios</li>
-          <li>Adopción de Kubernetes y estrategias de contenedorización</li>
-          <li>Reducción de riesgos operativos en migraciones a gran escala</li>
-        </ul>
+        <nav aria-label="Secciones de la página">
+          <a href="#sobre-mi" class="nav-link active">Sobre mí</a>
+          <a href="#experiencia-tecnica" class="nav-link">Experiencia técnica</a>
+          <a href="#habilidades" class="nav-link">Habilidades</a>
+          <a href="#trayectoria" class="nav-link">Trayectoria</a>
+        </nav>
       </div>
-      <div class="card">
-        <h3>Plataformas Backend Confiables</h3>
-        <ul>
-          <li>Diseño de servicios backend resilientes y altamente disponibles</li>
-          <li>Mejora de rendimiento, escalabilidad y tolerancia a fallos</li>
-          <li>Operación de sistemas críticos de pagos y transacciones</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>Liderazgo Técnico</h3>
-        <ul>
-          <li>Liderazgo y mentoría de ingenieros</li>
-          <li>Comunicación técnica clara con stakeholders</li>
-          <li>Mejora continua de procesos de entrega y calidad</li>
-        </ul>
-      </div>
-    </div>
 
-    <h2>Experiencia</h2>
-    <div class="experience">
-      <div class="card">
-        <h3>Tech Mahindra</h3>
-        <p><strong>Senior Software Engineer</strong> · 2021 – Presente</p>
+      <div class="sidebar-footer">
+        <a href="https://www.linkedin.com/in/cristiancolorado/" target="_blank" rel="noopener" class="btn-linkedin">
+          Conectar en LinkedIn →
+        </a>
+        <div class="lang-switch">
+          <a href="/" aria-label="English version">EN</a>
+          &nbsp;|&nbsp;
+          <a href="/es" aria-label="Versión en Español" aria-current="page">ES</a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── MAIN CONTENT ── -->
+    <main class="content">
+
+      <section id="sobre-mi">
+        <h2>Sobre mí</h2>
         <p>
-          Desarrollo y operación de servicios de pago críticos para una gran plataforma de retail en EE.UU. Enfocado en backend cloud-native, migraciones a Kubernetes, modernización de CI/CD y sistemas de alta disponibilidad.
+          Ingeniero de software senior con más de 15 años de experiencia construyendo, modernizando
+          y operando sistemas backend de alta disponibilidad para empresas en Estados Unidos.
+          Especializado en arquitecturas cloud-native, migraciones a Kubernetes y plataformas
+          críticas de pagos.
         </p>
-      </div>
-      <div class="card">
-        <h3>Unosquare</h3>
-        <p><strong>Team Lead / Senior Software Engineer</strong> · 2017 – 2021</p>
         <p>
-          Lideré equipos de ingeniería y contribuí a la modernización de plataformas empresariales, arquitecturas de microservicios y sistemas cloud para clientes en EE.UU.
+          Amplia experiencia colaborando como contratista offshore desde México, trabajando
+          directamente con stakeholders y equipos distribuidos en EE.UU.
         </p>
-      </div>
-      <div class="card">
-        <h3>Accenture</h3>
-        <p><strong>Software Engineer</strong> · 2012 – 2017</p>
-        <p>
-          Participé en el diseño y evolución de servicios backend distribuidos para plataformas empresariales a gran escala, con enfoque en confiabilidad, escalabilidad y límites claros de servicio.
-        </p>
-      </div>
-    </div>
+      </section>
 
-    <div class="card" style="margin-top:48px; text-align:center;">
-      <h3>¿Te interesa colaborar?</h3>
-      <p>
-        Si buscas un ingeniero backend senior para modernizar sistemas, mejorar la confiabilidad o dar soporte a plataformas críticas, conectemos.
-      </p>
-      <p>
-        <a href="https://www.linkedin.com/in/cristiancolorado/" target="_blank">Conecta conmigo en LinkedIn →</a>
-      </p>
-    </div>
+      <section id="experiencia-tecnica">
+        <h2>Cómo ayudo a los equipos</h2>
+        <div class="expertise-grid">
+          <div class="expertise-card">
+            <h3>Modernización de Sistemas</h3>
+            <ul>
+              <li>Migración de monolitos a arquitecturas cloud-native y microservicios</li>
+              <li>Adopción de Kubernetes y estrategias de contenedorización</li>
+              <li>Reducción de riesgos operativos en migraciones a gran escala</li>
+            </ul>
+          </div>
+          <div class="expertise-card">
+            <h3>Plataformas Backend Confiables</h3>
+            <ul>
+              <li>Diseño de servicios backend resilientes y altamente disponibles</li>
+              <li>Mejora de rendimiento, escalabilidad y tolerancia a fallos</li>
+              <li>Operación de sistemas críticos de pagos y transacciones</li>
+            </ul>
+          </div>
+          <div class="expertise-card">
+            <h3>Liderazgo Técnico</h3>
+            <ul>
+              <li>Liderazgo y mentoría de ingenieros</li>
+              <li>Comunicación técnica clara con stakeholders</li>
+              <li>Mejora continua de procesos de entrega y calidad</li>
+            </ul>
+          </div>
+        </div>
+      </section>
 
-    <footer>
-      <p>Basado en México · Trabajando con empresas de EE.UU. como contratista offshore</p>
-      <p style="margin-top:12px; font-size:0.85rem;">
-        <a href="/" aria-label="English version">EN</a> |
-        <a href="/es" aria-label="Versión en Español">ES</a>
-      </p>
-    </footer>
+      <section id="habilidades">
+        <h2>Habilidades</h2>
+        <div class="skill-group">
+          <div class="skill-group-label">Backend &amp; Arquitectura</div>
+          <div class="pills">
+            <span class="pill">Java</span>
+            <span class="pill">Spring Boot</span>
+            <span class="pill">Microservicios</span>
+            <span class="pill">Sistemas Distribuidos</span>
+            <span class="pill">Alta Disponibilidad</span>
+            <span class="pill">Diseño de Sistemas</span>
+            <span class="pill">REST APIs</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-label">Cloud &amp; DevOps</div>
+          <div class="pills">
+            <span class="pill">Kubernetes</span>
+            <span class="pill">Docker</span>
+            <span class="pill">AWS</span>
+            <span class="pill">CI/CD</span>
+            <span class="pill">Observabilidad</span>
+            <span class="pill">Infrastructure as Code</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-label">Liderazgo</div>
+          <div class="pills">
+            <span class="pill">Liderazgo Técnico</span>
+            <span class="pill">Mentoría</span>
+            <span class="pill">Comunicación con Stakeholders</span>
+            <span class="pill">Entrega Ágil</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="trayectoria">
+        <h2>Trayectoria</h2>
+        <div class="timeline">
+
+          <div class="timeline-item">
+            <div class="timeline-left">
+              <div class="timeline-dot"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-body">
+              <h3>Tech Mahindra</h3>
+              <div class="timeline-meta">
+                <span class="timeline-role">Senior Software Engineer</span>
+                <span class="timeline-date">2021 – Presente</span>
+              </div>
+              <p>
+                Desarrollo y operación de servicios de pago críticos para una gran plataforma de
+                retail en EE.UU. Enfocado en backend cloud-native, migraciones a Kubernetes,
+                modernización de CI/CD y sistemas de alta disponibilidad.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-left">
+              <div class="timeline-dot"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-body">
+              <h3>Unosquare</h3>
+              <div class="timeline-meta">
+                <span class="timeline-role">Team Lead / Senior Software Engineer</span>
+                <span class="timeline-date">2017 – 2021</span>
+              </div>
+              <p>
+                Lideré equipos de ingeniería y contribuí a la modernización de plataformas
+                empresariales, arquitecturas de microservicios y sistemas cloud para
+                clientes en EE.UU.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-left">
+              <div class="timeline-dot"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-body">
+              <h3>Accenture</h3>
+              <div class="timeline-meta">
+                <span class="timeline-role">Software Engineer</span>
+                <span class="timeline-date">2012 – 2017</span>
+              </div>
+              <p>
+                Participé en el diseño y evolución de servicios backend distribuidos para
+                plataformas empresariales a gran escala, con enfoque en confiabilidad,
+                escalabilidad y límites claros de servicio.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
   </div>
+
+  <script>
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
+          });
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    sections.forEach(s => observer.observe(s));
+  </script>
 </body>
 </html>
