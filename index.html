@@ -137,39 +137,53 @@
     }
 
     .nav-link {
-      display: flex;
-      align-items: center;
-      gap: 14px;
+      position: relative;
+      display: block;
       font-size: 0.72rem;
       font-weight: 700;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--text-secondary);
       text-decoration: none;
-      padding: 7px 0;
-      transition: color 0.2s;
+      padding: 8px 0 8px 18px;
+      transition: color 0.25s, transform 0.25s;
     }
 
     .nav-link::before {
       content: '';
-      display: block;
-      width: 24px;
-      height: 1px;
-      background: currentColor;
-      transition: width 0.25s ease, background 0.25s ease;
-      flex-shrink: 0;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      border-radius: 2px;
+      background: var(--accent);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+      opacity: 0;
     }
 
-    .nav-link:hover,
-    .nav-link.active {
+    .nav-link:hover {
       color: var(--text-primary);
+      transform: translateX(6px);
       text-decoration: none;
     }
 
-    .nav-link.active::before,
     .nav-link:hover::before {
-      width: 48px;
-      background: var(--accent);
+      transform: scaleY(1);
+      opacity: 0.55;
+    }
+
+    .nav-link.active {
+      color: var(--text-primary);
+      transform: translateX(6px);
+      text-decoration: none;
+    }
+
+    .nav-link.active::before {
+      transform: scaleY(1);
+      opacity: 1;
     }
 
     /* ── SIDEBAR FOOTER ── */
@@ -547,6 +561,7 @@
           <a href="#expertise" class="nav-link">Expertise</a>
           <a href="#skills" class="nav-link">Skills</a>
           <a href="#experience" class="nav-link">Experience</a>
+          <a href="#education" class="nav-link">Education</a>
           <a href="#recognition" class="nav-link">Certifications</a>
         </nav>
       </div>
@@ -735,6 +750,43 @@
                 sales application suite with a new enterprise engineering system, with 10 months
                 deployed on-site at GE facilities in Albany, NY and Houston, TX.
               </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <section id="education">
+        <h2>Education</h2>
+        <div class="timeline">
+
+          <div class="timeline-item">
+            <div class="timeline-left">
+              <div class="timeline-dot"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-body">
+              <h3>Universidad Carlos III de Madrid</h3>
+              <div class="timeline-meta">
+                <span class="timeline-role">Master's — Entrepreneurship &amp; Business Creation</span>
+                <span class="timeline-date">2014 – 2015</span>
+              </div>
+              <p>MBA focused on entrepreneurship and new venture creation, completed in Madrid, Spain.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-left">
+              <div class="timeline-dot"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-body">
+              <h3>Universidad Autónoma de San Luis Potosí</h3>
+              <div class="timeline-meta">
+                <span class="timeline-role">B.Eng., Computer Science</span>
+                <span class="timeline-date">2002 – 2007</span>
+              </div>
+              <p>Bachelor's degree in Computer Science, foundation of 17+ years in software engineering.</p>
             </div>
           </div>
 
