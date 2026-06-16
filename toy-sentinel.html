@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Toy Sentinel — Case Study | Cristian Colorado</title>
+  <meta name="description" content="Case study: Toy Sentinel — a distributed, event-driven retail intelligence platform that monitors collectible toy listings across multiple e-commerce retailers and delivers real-time alerts to 200+ subscribers via Telegram." />
+  <meta name="author" content="Cristian Colorado" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/cc.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/cc.png" />
+  <link rel="apple-touch-icon" href="/images/cc.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-primary: #0a192f;
+      --bg-secondary: #020c1b;
+      --text-primary: #ccd6f6;
+      --text-secondary: #8892b0;
+      --accent: #4fd1c5;
+      --border-subtle: #112240;
+      --sidebar-width: 320px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+    }
+
+    /* ── FLOATING ACTIONS ── */
+    .floating-actions {
+      position: fixed;
+      top: 24px;
+      right: 28px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .floating-actions .btn-back {
+      background: transparent;
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-decoration: none;
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: 1px solid rgba(79, 209, 197, 0.4);
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+
+    .floating-actions .btn-back:hover {
+      background: rgba(79, 209, 197, 0.08);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
+
+    .btn-lang {
+      background: transparent;
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-decoration: none;
+      padding: 7px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+      letter-spacing: 0.08em;
+      transition: color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-lang:hover {
+      color: var(--accent);
+      border-color: rgba(79, 209, 197, 0.4);
+      text-decoration: none;
+    }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      padding: 72px 48px;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border-subtle);
+      overflow-y: auto;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      margin-bottom: 32px;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+      transform: translateX(-3px);
+      text-decoration: none;
+    }
+
+    .back-link::before {
+      content: '←';
+      font-size: 0.9rem;
+    }
+
+    .sidebar h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0 0 4px;
+      color: var(--text-primary);
+      line-height: 1.25;
+    }
+
+    .sidebar .project-type {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin: 0 0 32px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── ACTIVE BADGE ── */
+    .active-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #4ade80;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      background: rgba(74, 222, 128, 0.08);
+      border: 1px solid rgba(74, 222, 128, 0.22);
+      border-radius: 999px;
+      padding: 5px 12px;
+      margin-bottom: 28px;
+    }
+
+    .active-badge::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      background: #4ade80;
+      border-radius: 50%;
+      flex-shrink: 0;
+      animation: pulse 2.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); }
+      50% { opacity: 0.6; box-shadow: 0 0 0 5px rgba(74, 222, 128, 0); }
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nav-link {
+      position: relative;
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 8px 0 8px 18px;
+      transition: color 0.25s, transform 0.25s;
+    }
+
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      border-radius: 2px;
+      background: var(--accent);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+      opacity: 0;
+    }
+
+    .nav-link:hover {
+      color: var(--text-primary);
+      transform: translateX(6px);
+      text-decoration: none;
+    }
+
+    .nav-link:hover::before { transform: scaleY(1); opacity: 0.55; }
+
+    .nav-link.active {
+      color: var(--text-primary);
+      transform: translateX(6px);
+      text-decoration: none;
+    }
+
+    .nav-link.active::before { transform: scaleY(1); opacity: 1; }
+
+    .sidebar-footer { display: none; }
+
+    /* ── MAIN CONTENT ── */
+    .content {
+      margin-left: var(--sidebar-width);
+      padding: 72px 64px 96px;
+      max-width: 760px;
+    }
+
+    section { margin-bottom: 80px; }
+
+    h2 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      margin: 0 0 36px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      white-space: nowrap;
+    }
+
+    h2::after {
+      content: '';
+      display: block;
+      height: 1px;
+      flex: 1;
+      background: var(--border-subtle);
+    }
+
+    h3 { color: var(--text-primary); font-size: 1rem; font-weight: 600; margin: 0 0 10px; }
+
+    p { color: var(--text-secondary); margin: 0 0 16px; font-size: 0.95rem; }
+
+    p:last-child { margin-bottom: 0; }
+
+    a { color: var(--accent); text-decoration: none; font-weight: 500; }
+    a:hover { text-decoration: underline; }
+
+    ul { margin: 0 0 16px; padding-left: 20px; color: var(--text-secondary); font-size: 0.93rem; }
+    ul li { margin-bottom: 6px; }
+
+    /* ── HERO ── */
+    .project-hero { margin-bottom: 64px; }
+
+    .project-hero h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin: 0 0 6px;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .project-hero .subtitle {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin: 0 0 18px;
+      letter-spacing: 0.01em;
+    }
+
+    .project-hero .summary {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      margin: 0 0 28px;
+      max-width: 580px;
+      line-height: 1.75;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .hero-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .hero-meta-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    .hero-meta-value {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .hero-meta-value.active { color: #4ade80; }
+
+    .hero-meta-value.users {
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    /* ── PILLS ── */
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .pill {
+      background: rgba(79, 209, 197, 0.08);
+      color: var(--accent);
+      border: 1px solid rgba(79, 209, 197, 0.22);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── STAT CARDS ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 20px 18px;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+
+    .stat-card:hover { border-color: rgba(79, 209, 197, 0.3); }
+
+    .stat-value {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    /* ── PIPELINE ── */
+    .pipeline {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 36px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .pipeline-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .pipeline-box {
+      background: rgba(79, 209, 197, 0.07);
+      border: 1px solid rgba(79, 209, 197, 0.25);
+      border-radius: 8px;
+      padding: 10px 24px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: 0.02em;
+      text-align: center;
+      min-width: 220px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .pipeline-box.source {
+      background: rgba(79, 209, 197, 0.12);
+      border-color: rgba(79, 209, 197, 0.4);
+      color: var(--accent);
+    }
+
+    .pipeline-box.output {
+      background: rgba(74, 222, 128, 0.07);
+      border-color: rgba(74, 222, 128, 0.3);
+      color: #4ade80;
+    }
+
+    .pipeline-box.queue {
+      background: rgba(246, 173, 85, 0.07);
+      border-color: rgba(246, 173, 85, 0.25);
+      color: #f6ad55;
+    }
+
+    .pipeline-step:hover .pipeline-box {
+      background: rgba(79, 209, 197, 0.12);
+      border-color: rgba(79, 209, 197, 0.5);
+    }
+
+    .pipeline-arrow {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin: 6px 0;
+      opacity: 0.6;
+    }
+
+    .pipeline-sublabel {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-top: 4px;
+      opacity: 0.7;
+    }
+
+    /* ── CARDS ── */
+    .cards-grid { display: flex; flex-direction: column; gap: 14px; }
+
+    .card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 24px 26px;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover { border-color: rgba(79, 209, 197, 0.3); }
+
+    .card h3 {
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin: 0 0 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    /* ── CHALLENGE CARDS ── */
+    .challenge-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 24px 26px;
+      margin-bottom: 14px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .challenge-card:hover { border-color: rgba(79, 209, 197, 0.3); transform: translateX(4px); }
+    .challenge-card:last-child { margin-bottom: 0; }
+    .challenge-card h3 { color: var(--text-primary); font-size: 0.95rem; font-weight: 600; margin: 0 0 10px; }
+
+    .challenge-solution {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .challenge-solution-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    /* ── FEATURE CARDS ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 12px;
+    }
+
+    .feature-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 20px 22px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .feature-card:hover { border-color: rgba(79, 209, 197, 0.3); transform: translateY(-3px); }
+
+    .feature-icon { font-size: 1.35rem; margin-bottom: 10px; }
+    .feature-title { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+    .feature-desc { font-size: 0.83rem; color: var(--text-secondary); line-height: 1.5; }
+
+    /* ── NOTIFICATION PREVIEW ── */
+    .notification-preview {
+      background: #1a1a2e;
+      border: 1px solid #2a2a4a;
+      border-radius: 14px;
+      padding: 20px 22px;
+      max-width: 360px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    .notif-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .notif-avatar {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .notif-sender {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .notif-time {
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+      margin-left: auto;
+    }
+
+    .notif-tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: rgba(74, 222, 128, 0.12);
+      color: #4ade80;
+      border-radius: 4px;
+      padding: 2px 7px;
+      margin-bottom: 8px;
+    }
+
+    .notif-product {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .notif-price-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .notif-price-new {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #4ade80;
+    }
+
+    .notif-price-old {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      text-decoration: line-through;
+    }
+
+    .notif-savings {
+      font-size: 0.78rem;
+      font-weight: 700;
+      background: rgba(74, 222, 128, 0.15);
+      color: #4ade80;
+      border-radius: 999px;
+      padding: 2px 8px;
+    }
+
+    .notif-meta {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .notif-cta {
+      display: inline-block;
+      background: var(--accent);
+      color: #0a192f;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+
+    /* ── IMPACT ── */
+    .impact-highlight {
+      background: rgba(74, 222, 128, 0.05);
+      border: 1px solid rgba(74, 222, 128, 0.2);
+      border-left: 3px solid #4ade80;
+      border-radius: 0 10px 10px 0;
+      padding: 20px 24px;
+      margin-bottom: 14px;
+    }
+
+    .impact-highlight p { margin: 0; font-size: 0.92rem; color: var(--text-secondary); }
+
+    /* ── LESSONS ── */
+    .lessons-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .lesson-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 16px 18px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      transition: border-color 0.2s;
+    }
+
+    .lesson-item:hover { border-color: rgba(79, 209, 197, 0.25); }
+
+    .lesson-num {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(79, 209, 197, 0.1);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      letter-spacing: 0;
+      margin-top: 1px;
+    }
+
+    .lesson-text { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.55; }
+
+    /* ── TECH STACK ── */
+    .tech-group { margin-bottom: 24px; }
+    .tech-group:last-child { margin-bottom: 0; }
+
+    .tech-group-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+    }
+
+    /* ── SCREENSHOT PLACEHOLDER ── */
+    .screenshot-placeholder {
+      background: var(--bg-secondary);
+      border: 2px dashed var(--border-subtle);
+      border-radius: 12px;
+      padding: 52px 32px;
+      text-align: center;
+    }
+
+    .screenshot-placeholder p {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin-bottom: 0;
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 1024px) {
+      .floating-actions { display: none; }
+
+      .sidebar-footer {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .sidebar-footer .btn-back {
+        display: block;
+        background: transparent;
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 0.82rem;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-align: center;
+        border: 1px solid rgba(79, 209, 197, 0.4);
+        transition: background 0.2s, border-color 0.2s;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+      }
+
+      .sidebar-footer .btn-back:hover {
+        background: rgba(79, 209, 197, 0.08);
+        border-color: var(--accent);
+        text-decoration: none;
+      }
+
+      .layout { flex-direction: column; }
+
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        padding: 36px 28px 28px;
+        border-right: none;
+        border-bottom: 1px solid var(--border-subtle);
+        overflow-y: visible;
+      }
+
+      nav {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 6px;
+        margin-top: 0;
+        margin-bottom: 4px;
+        padding-bottom: 2px;
+      }
+
+      nav::-webkit-scrollbar { display: none; }
+
+      .nav-link {
+        white-space: nowrap;
+        padding: 6px 14px;
+        background: var(--border-subtle);
+        border-radius: 20px;
+        font-size: 0.68rem;
+        transform: none !important;
+      }
+
+      .nav-link::before { display: none; }
+
+      .nav-link.active,
+      .nav-link:hover {
+        background: rgba(79, 209, 197, 0.12);
+        color: var(--accent);
+      }
+
+      section { margin-bottom: 56px; }
+
+      .content { margin-left: 0; padding: 48px 28px 72px; max-width: 100%; }
+
+      .project-hero h1 { font-size: 1.7rem; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .pipeline { padding: 28px 20px; }
+      .pipeline-box { min-width: 180px; }
+    }
+
+    @media (max-width: 600px) {
+      .sidebar { padding: 28px 20px 24px; }
+      .content { padding: 40px 20px 64px; }
+      .project-hero h1 { font-size: 1.45rem; }
+      .hero-meta { gap: 16px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .pipeline-box { min-width: 150px; font-size: 0.8rem; }
+
+      .sidebar-footer { flex-direction: column; align-items: stretch; }
+      .sidebar-footer .btn-back,
+      .sidebar-footer .btn-lang { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="floating-actions">
+    <a href="/es/toy-sentinel.html" class="btn-lang">ES</a>
+    <a href="/" class="btn-back">← Back to Portfolio</a>
+  </div>
+
+  <div class="layout">
+
+    <aside class="sidebar">
+      <div>
+        <a href="/" class="back-link">Back to Portfolio</a>
+
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:4px;">
+          <img src="/images/toy-sentinel/toy-sentinel.jpeg" alt="Toy Sentinel logo" style="width:38px; height:38px; border-radius:10px; flex-shrink:0;" />
+          <h1 style="margin:0;">Toy Sentinel</h1>
+        </div>
+        <p class="project-type">Portfolio Case Study</p>
+
+        <div class="active-badge">Active — Production</div>
+
+        <nav aria-label="Case study sections">
+          <a href="#overview" class="nav-link active">Overview</a>
+          <a href="#problem" class="nav-link">Problem</a>
+          <a href="#solution" class="nav-link">Solution</a>
+          <a href="#architecture" class="nav-link">Architecture</a>
+          <a href="#challenges" class="nav-link">Challenges</a>
+          <a href="#features" class="nav-link">Features</a>
+          <a href="#notifications" class="nav-link">Notifications</a>
+          <a href="#metrics" class="nav-link">Metrics</a>
+          <a href="#tech-stack" class="nav-link">Tech Stack</a>
+          <a href="#lessons" class="nav-link">Lessons</a>
+        </nav>
+
+        <div class="sidebar-footer">
+          <a href="/es/toy-sentinel.html" class="btn-lang">ES</a>
+          <a href="/" class="btn-back">← Back to Portfolio</a>
+        </div>
+      </div>
+    </aside>
+
+    <main class="content">
+
+      <!-- HERO -->
+      <div class="project-hero" id="overview">
+        <h1>Toy Sentinel</h1>
+        <p class="subtitle">Event-Driven Retail Intelligence Platform</p>
+        <p class="summary">
+          A distributed monitoring platform that continuously tracks collectible products
+          across multiple e-commerce retailers, detects inventory and pricing changes,
+          and automatically delivers real-time alerts to subscribers via Telegram.
+        </p>
+
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Role</span>
+            <span class="hero-meta-value">Founder &amp; Lead Developer</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Status</span>
+            <span class="hero-meta-value active">Active — Production</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Subscribers</span>
+            <span class="hero-meta-value users">200+</span>
+          </div>
+        </div>
+
+        <div class="pills">
+          <span class="pill">Node.js</span>
+          <span class="pill">MongoDB</span>
+          <span class="pill">Redis</span>
+          <span class="pill">Telegram API</span>
+          <span class="pill">Web Scraping</span>
+          <span class="pill">Event-Driven Architecture</span>
+          <span class="pill">Distributed Systems</span>
+        </div>
+      </div>
+
+      <!-- PROBLEM -->
+      <section id="problem">
+        <h2>The Problem</h2>
+        <p>
+          Collectible figures occupy a uniquely difficult retail niche. Popular items sell out
+          within hours of listing. Price drops are temporary and unannounced. Restocks happen
+          without notice across multiple retailers simultaneously.
+        </p>
+        <p>
+          Collectors who want to stay informed face a tedious manual process:
+        </p>
+        <ul>
+          <li>Checking multiple retailer websites repeatedly throughout the day.</li>
+          <li>Manually comparing prices across Amazon, MercadoLibre, and specialty stores.</li>
+          <li>Missing restocks or discounts because no notification system exists.</li>
+          <li>Discovering sold-out products minutes after they listed.</li>
+        </ul>
+        <p>
+          The problem is not availability of information — it is the speed and effort
+          required to act on it.
+        </p>
+      </section>
+
+      <!-- SOLUTION -->
+      <section id="solution">
+        <h2>The Solution</h2>
+        <p>
+          Toy Sentinel eliminates manual monitoring entirely. The platform continuously
+          scrapes product listings from multiple retail sources, detects meaningful changes
+          — new listings, price drops, restocks — and publishes structured notifications
+          to Telegram channels where subscribers receive them in real time.
+        </p>
+        <div class="impact-highlight">
+          <p>Collectors no longer check websites. The platform watches on their behalf and alerts them the moment something relevant happens — before inventory runs out.</p>
+        </div>
+        <p>
+          The result is a system that runs continuously in production, serves 200+ subscribers
+          daily, and demonstrates what separates a working distributed system from a
+          weekend demo.
+        </p>
+      </section>
+
+      <!-- ARCHITECTURE -->
+      <section id="architecture">
+        <h2>System Architecture</h2>
+        <p>
+          The platform is built as a pipeline of decoupled components. Scraping, change
+          detection, and notification delivery are intentionally separated — each can fail,
+          retry, or scale independently.
+        </p>
+
+        <div class="pipeline">
+          <div class="pipeline-step">
+            <div class="pipeline-box source">Retail Sites</div>
+            <div class="pipeline-sublabel">Amazon · MercadoLibre · Specialty Stores</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Scrapers</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Product Parser</div>
+            <div class="pipeline-sublabel">Normalizes to common model</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">MongoDB Store</div>
+            <div class="pipeline-sublabel">Product state &amp; price history</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Change Engine</div>
+            <div class="pipeline-sublabel">Diffs current vs. previous state</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Event Generation</div>
+            <div class="pipeline-sublabel">New listing · Price drop · Restock</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box queue">Redis Queue</div>
+            <div class="pipeline-sublabel">Decouples scraping from delivery</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Telegram Consumer</div>
+            <div class="pipeline-sublabel">Rate-limited async delivery</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box output">Telegram Channels → Users</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CHALLENGES -->
+      <section id="challenges">
+        <h2>Engineering Challenges</h2>
+
+        <div class="challenge-card">
+          <h3>Retail Websites Change Frequently</h3>
+          <p>
+            Each retailer exposes product data differently — different HTML structures,
+            dynamic loading patterns, anti-scraping measures, and inconsistent field naming.
+            Layouts change without notice and silently break extraction logic.
+          </p>
+          <div class="challenge-solution">
+            <div class="challenge-solution-label">Solution</div>
+            <p style="margin:0; font-size: 0.9rem; color: var(--text-secondary);">
+              Built retailer-specific extraction strategies encapsulated behind a common
+              product interface. Each scraper normalizes output to the same internal model,
+              so downstream components are fully isolated from retailer-specific changes.
+            </p>
+          </div>
+        </div>
+
+        <div class="challenge-card">
+          <h3>Duplicate and Noisy Notifications</h3>
+          <p>
+            Without safeguards, minor price fluctuations or repeated scrapes of the same
+            listing trigger multiple alerts. Subscribers receiving duplicate notifications
+            quickly lose trust in the platform and unsubscribe.
+          </p>
+          <div class="challenge-solution">
+            <div class="challenge-solution-label">Solution</div>
+            <p style="margin:0; font-size: 0.9rem; color: var(--text-secondary);">
+              Implemented event deduplication logic in the Change Engine. Events are only
+              generated when a meaningful threshold is crossed — not on every scrape cycle
+              — and are fingerprinted to prevent re-publication of identical events.
+            </p>
+          </div>
+        </div>
+
+        <div class="challenge-card">
+          <h3>Telegram Rate Limits Under Load</h3>
+          <p>
+            When multiple products change simultaneously, naively pushing all notifications
+            at once hits Telegram's API rate limits, causing message delivery failures
+            and requiring complex retry logic across the system.
+          </p>
+          <div class="challenge-solution">
+            <div class="challenge-solution-label">Solution</div>
+            <p style="margin:0; font-size: 0.9rem; color: var(--text-secondary);">
+              Introduced a Redis-backed message queue between event generation and delivery.
+              The Telegram consumer processes the queue asynchronously at a controlled rate,
+              fully decoupling throughput from scraping cadence.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FEATURES -->
+      <section id="features">
+        <h2>Key Features</h2>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <div class="feature-title">Multi-Source Monitoring</div>
+            <div class="feature-desc">Independent scraper modules for Amazon, MercadoLibre, and specialty retailers — each normalized to a shared product model.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <div class="feature-title">Event-Driven Detection</div>
+            <div class="feature-desc">Price changes generate events rather than immediate notifications, enabling batching, filtering, and prioritization before delivery.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📉</div>
+            <div class="feature-title">Price History Tracking</div>
+            <div class="feature-desc">Products maintain full pricing history, enabling discount detection, trend analysis, and accurate savings percentage calculations.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📦</div>
+            <div class="feature-title">Restock Alerts</div>
+            <div class="feature-desc">Detects when previously out-of-stock products become available again and immediately queues a notification.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🚦</div>
+            <div class="feature-title">Queue-Based Delivery</div>
+            <div class="feature-desc">Redis queue decouples scraping from message delivery, preventing rate-limit failures and enabling retry logic.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📲</div>
+            <div class="feature-title">Telegram Distribution</div>
+            <div class="feature-desc">Structured alerts delivered to Telegram channels with product image, prices, savings, retailer info, and direct purchase link.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- NOTIFICATIONS -->
+      <section id="notifications">
+        <h2>Notification Format</h2>
+        <p>
+          Each alert is structured to give subscribers everything they need to make a
+          purchase decision instantly — without opening a browser.
+        </p>
+
+        <div style="background:var(--bg-secondary); border:1px solid var(--border-subtle); border-radius:14px; overflow:hidden; max-width:300px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(79,209,197,0.35)'" onmouseout="this.style.borderColor='var(--border-subtle)'">
+          <img src="/images/toy-sentinel/1.png" alt="Toy Sentinel Telegram channel showing live price drop notifications" loading="lazy" style="width:100%; height:auto; display:block;" />
+        </div>
+
+        <p style="margin-top: 16px;">
+          Notifications include product image, current and previous price, savings
+          percentage, retailer, stock status, and a direct purchase link — everything
+          needed to act immediately.
+        </p>
+      </section>
+
+      <!-- METRICS -->
+      <section id="metrics">
+        <h2>Platform Metrics</h2>
+        <p>
+          Toy Sentinel is a live production system, not a demo. These metrics reflect
+          real operational scale.
+        </p>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value">200+</div>
+            <div class="stat-label">Active subscribers across channels</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">24/7</div>
+            <div class="stat-label">Continuous automated monitoring</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">Multi</div>
+            <div class="stat-label">Retailers monitored simultaneously</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">Real-time</div>
+            <div class="stat-label">Alert delivery on event detection</div>
+          </div>
+        </div>
+
+        <div class="impact-highlight" style="margin-top: 24px;">
+          <p>Unlike portfolio demos that simulate production conditions, Toy Sentinel runs continuously, serves real users daily, and has been maintained through retailer structure changes, Telegram API updates, and infrastructure failures.</p>
+        </div>
+      </section>
+
+      <!-- TECH STACK -->
+      <section id="tech-stack">
+        <h2>Technologies &amp; Architecture</h2>
+
+        <div class="tech-group">
+          <div class="tech-group-label">Scraping &amp; Extraction</div>
+          <div class="pills">
+            <span class="pill">Node.js</span>
+            <span class="pill">Custom Scrapers</span>
+            <span class="pill">HTML Parsing</span>
+            <span class="pill">Retailer-Specific Adapters</span>
+          </div>
+        </div>
+
+        <div class="tech-group">
+          <div class="tech-group-label">Event Processing</div>
+          <div class="pills">
+            <span class="pill">Change Detection Engine</span>
+            <span class="pill">Event Deduplication</span>
+            <span class="pill">Redis Queue</span>
+            <span class="pill">Async Consumers</span>
+          </div>
+        </div>
+
+        <div class="tech-group">
+          <div class="tech-group-label">Persistence</div>
+          <div class="pills">
+            <span class="pill">MongoDB</span>
+            <span class="pill">Price History Store</span>
+            <span class="pill">Product State Model</span>
+          </div>
+        </div>
+
+        <div class="tech-group">
+          <div class="tech-group-label">Distribution</div>
+          <div class="pills">
+            <span class="pill">Telegram Bot API</span>
+            <span class="pill">Rate Limiting</span>
+            <span class="pill">Channel Management</span>
+          </div>
+        </div>
+
+        <div class="tech-group">
+          <div class="tech-group-label">Operations</div>
+          <div class="pills">
+            <span class="pill">Long-Running Services</span>
+            <span class="pill">Error Recovery</span>
+            <span class="pill">Monitoring</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- LESSONS -->
+      <section id="lessons">
+        <h2>Lessons Learned</h2>
+
+        <div class="lessons-list">
+          <div class="lesson-item">
+            <div class="lesson-num">1</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">Decoupling is not an optimization — it's a reliability requirement.</strong>
+              Connecting scraping directly to notification delivery means a Telegram API
+              failure stops the entire pipeline. The Redis queue was not added for scale;
+              it was added because the system couldn't survive without it.
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-num">2</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">Websites are not stable APIs.</strong>
+              Every retailer integration has broken at least once due to an unannounced
+              layout change. Treating scrapers as fragile and writing them to fail loudly —
+              rather than silently producing corrupt data — is the only sustainable approach.
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-num">3</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">Notification quality determines subscriber retention.</strong>
+              A duplicate notification, a false positive, or a price that was already
+              corrected by the time the user clicks erodes trust immediately. The Change
+              Engine's deduplication logic exists to protect the subscriber experience,
+              not just system efficiency.
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-num">4</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">Production is a different problem than development.</strong>
+              Running a system 24/7 surfaced failure modes that no test suite covers:
+              memory leaks in long-running scrapers, transient network failures mid-page,
+              Telegram session expiry, and MongoDB connection pool exhaustion under load.
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-num">5</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">Event-driven architecture scales user value, not just throughput.</strong>
+              The biggest win from the event model was not performance — it was the ability
+              to add new event types (restocks, new listings) without modifying the delivery
+              or scraping layers. The architecture made the product easier to extend.
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-num">6</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">Real users are the best observability tool.</strong>
+              With 200+ subscribers receiving daily alerts, users report broken notifications
+              faster than any monitoring dashboard. Subscriber feedback became an early
+              warning system for retailer changes and pipeline failures.
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section[id], .project-hero[id]');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
+
+    sections.forEach(s => observer.observe(s));
+  </script>
+
+</body>
+</html>

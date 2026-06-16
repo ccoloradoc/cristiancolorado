@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMAE Tracker — Caso de Estudio | Cristian Colorado</title>
+  <meta name="description" content="Caso de estudio: SMAE Tracker — plataforma de seguimiento nutricional construida sobre el Sistema Mexicano de Alimentos Equivalentes (SMAE), diseñada para simplificar la planificación de comidas y la adherencia dietética." />
+  <meta name="author" content="Cristian Colorado" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/cc.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/cc.png" />
+  <link rel="apple-touch-icon" href="/images/cc.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-primary: #0a192f;
+      --bg-secondary: #020c1b;
+      --text-primary: #ccd6f6;
+      --text-secondary: #8892b0;
+      --accent: #4fd1c5;
+      --border-subtle: #112240;
+      --sidebar-width: 320px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+    }
+
+    /* ── FLOATING ACTIONS ── */
+    .floating-actions {
+      position: fixed;
+      top: 24px;
+      right: 28px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .floating-actions .btn-back {
+      background: transparent;
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-decoration: none;
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: 1px solid rgba(79, 209, 197, 0.4);
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+
+    .floating-actions .btn-back:hover {
+      background: rgba(79, 209, 197, 0.08);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
+
+    .btn-lang {
+      background: transparent;
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-decoration: none;
+      padding: 7px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+      letter-spacing: 0.08em;
+      transition: color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-lang:hover {
+      color: var(--accent);
+      border-color: rgba(79, 209, 197, 0.4);
+      text-decoration: none;
+    }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      padding: 72px 48px;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border-subtle);
+      overflow-y: auto;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      margin-bottom: 32px;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+      transform: translateX(-3px);
+      text-decoration: none;
+    }
+
+    .back-link::before {
+      content: '←';
+      font-size: 0.9rem;
+    }
+
+    .sidebar h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0 0 4px;
+      color: var(--text-primary);
+      line-height: 1.25;
+    }
+
+    .sidebar .project-type {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin: 0 0 32px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── ACTIVE BADGE ── */
+    .active-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #4ade80;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      background: rgba(74, 222, 128, 0.08);
+      border: 1px solid rgba(74, 222, 128, 0.22);
+      border-radius: 999px;
+      padding: 5px 12px;
+      margin-bottom: 28px;
+    }
+
+    .active-badge::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      background: #4ade80;
+      border-radius: 50%;
+      flex-shrink: 0;
+      animation: pulse 2.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); }
+      50% { opacity: 0.6; box-shadow: 0 0 0 5px rgba(74, 222, 128, 0); }
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nav-link {
+      position: relative;
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 8px 0 8px 18px;
+      transition: color 0.25s, transform 0.25s;
+    }
+
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      border-radius: 2px;
+      background: var(--accent);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+      opacity: 0;
+    }
+
+    .nav-link:hover {
+      color: var(--text-primary);
+      transform: translateX(6px);
+      text-decoration: none;
+    }
+
+    .nav-link:hover::before {
+      transform: scaleY(1);
+      opacity: 0.55;
+    }
+
+    .nav-link.active {
+      color: var(--text-primary);
+      transform: translateX(6px);
+      text-decoration: none;
+    }
+
+    .nav-link.active::before {
+      transform: scaleY(1);
+      opacity: 1;
+    }
+
+    .sidebar-footer { display: none; }
+
+    /* ── MAIN CONTENT ── */
+    .content {
+      margin-left: var(--sidebar-width);
+      padding: 72px 64px 96px;
+      max-width: 760px;
+    }
+
+    section {
+      margin-bottom: 80px;
+    }
+
+    h2 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      margin: 0 0 36px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      white-space: nowrap;
+    }
+
+    h2::after {
+      content: '';
+      display: block;
+      height: 1px;
+      flex: 1;
+      background: var(--border-subtle);
+    }
+
+    h3 {
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0 0 10px;
+    }
+
+    p {
+      color: var(--text-secondary);
+      margin: 0 0 16px;
+      font-size: 0.95rem;
+    }
+
+    p:last-child { margin-bottom: 0; }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    a:hover { text-decoration: underline; }
+
+    ul {
+      margin: 0 0 16px;
+      padding-left: 20px;
+      color: var(--text-secondary);
+      font-size: 0.93rem;
+    }
+
+    ul li { margin-bottom: 6px; }
+
+    /* ── HERO ── */
+    .project-hero {
+      margin-bottom: 64px;
+    }
+
+    .project-hero h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin: 0 0 14px;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .project-hero .summary {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      margin: 0 0 28px;
+      max-width: 580px;
+      line-height: 1.75;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .hero-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .hero-meta-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    .hero-meta-value {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .hero-meta-value.active {
+      color: #4ade80;
+    }
+
+    /* ── PILLS ── */
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill {
+      background: rgba(79, 209, 197, 0.08);
+      color: var(--accent);
+      border: 1px solid rgba(79, 209, 197, 0.22);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 24px 26px;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: rgba(79, 209, 197, 0.3);
+    }
+
+    .card h3 {
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin: 0 0 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .cards-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* ── FEATURE CARDS ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 12px;
+    }
+
+    .feature-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 20px 22px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(79, 209, 197, 0.3);
+      transform: translateY(-3px);
+    }
+
+    .feature-icon {
+      font-size: 1.35rem;
+      margin-bottom: 10px;
+    }
+
+    .feature-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .feature-desc {
+      font-size: 0.83rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ── PIPELINE / DOMAIN DIAGRAM ── */
+    .pipeline {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 36px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .pipeline-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .pipeline-box {
+      background: rgba(79, 209, 197, 0.07);
+      border: 1px solid rgba(79, 209, 197, 0.25);
+      border-radius: 8px;
+      padding: 10px 24px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: 0.02em;
+      text-align: center;
+      min-width: 200px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .pipeline-step:hover .pipeline-box {
+      background: rgba(79, 209, 197, 0.12);
+      border-color: rgba(79, 209, 197, 0.5);
+    }
+
+    .pipeline-box.root {
+      background: rgba(79, 209, 197, 0.12);
+      border-color: rgba(79, 209, 197, 0.4);
+      color: var(--accent);
+    }
+
+    .pipeline-box.leaf {
+      background: rgba(74, 222, 128, 0.07);
+      border-color: rgba(74, 222, 128, 0.3);
+      color: #4ade80;
+    }
+
+    .pipeline-arrow {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin: 6px 0;
+      opacity: 0.6;
+    }
+
+    /* ── CHALLENGE CARDS ── */
+    .challenge-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 24px 26px;
+      margin-bottom: 14px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .challenge-card:hover {
+      border-color: rgba(79, 209, 197, 0.3);
+      transform: translateX(4px);
+    }
+
+    .challenge-card:last-child { margin-bottom: 0; }
+
+    .challenge-card h3 {
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin: 0 0 10px;
+    }
+
+    .challenge-solution {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .challenge-solution-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    /* ── ROADMAP ── */
+    .roadmap-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    .roadmap-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 9px;
+      padding: 14px 16px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      transition: border-color 0.2s;
+    }
+
+    .roadmap-item:hover {
+      border-color: rgba(79, 209, 197, 0.22);
+    }
+
+    .roadmap-item::before {
+      content: '→';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-size: 0.8rem;
+      margin-top: 1px;
+    }
+
+    /* ── IMPACT HIGHLIGHT ── */
+    .impact-highlight {
+      background: rgba(74, 222, 128, 0.05);
+      border: 1px solid rgba(74, 222, 128, 0.2);
+      border-left: 3px solid #4ade80;
+      border-radius: 0 10px 10px 0;
+      padding: 20px 24px;
+      margin-bottom: 14px;
+    }
+
+    .impact-highlight p {
+      margin: 0;
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+    }
+
+    /* ── TECH STACK ── */
+    .tech-group {
+      margin-bottom: 24px;
+    }
+
+    .tech-group:last-child { margin-bottom: 0; }
+
+    .tech-group-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+    }
+
+    /* ── LESSONS ── */
+    .lessons-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .lesson-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 16px 18px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      transition: border-color 0.2s;
+    }
+
+    .lesson-item:hover {
+      border-color: rgba(79, 209, 197, 0.25);
+    }
+
+    .lesson-num {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(79, 209, 197, 0.1);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      letter-spacing: 0;
+      margin-top: 1px;
+    }
+
+    .lesson-text {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    /* ── GALLERY ── */
+    .screenshots-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .screenshot-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .screenshot-item:hover {
+      border-color: rgba(79, 209, 197, 0.35);
+      transform: translateY(-4px);
+    }
+
+    .screenshot-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .screenshot-caption {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-align: center;
+      padding: 10px 8px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 1024px) {
+      .floating-actions { display: none; }
+
+      .sidebar-footer {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .sidebar-footer .btn-back {
+        display: block;
+        background: transparent;
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 0.82rem;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-align: center;
+        border: 1px solid rgba(79, 209, 197, 0.4);
+        transition: background 0.2s, border-color 0.2s;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+      }
+
+      .sidebar-footer .btn-back:hover {
+        background: rgba(79, 209, 197, 0.08);
+        border-color: var(--accent);
+        text-decoration: none;
+      }
+
+      .sidebar-footer .btn-lang {
+        padding: 10px 16px;
+        font-size: 0.82rem;
+      }
+
+      .layout { flex-direction: column; }
+
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        padding: 36px 28px 28px;
+        border-right: none;
+        border-bottom: 1px solid var(--border-subtle);
+        overflow-y: visible;
+      }
+
+      nav {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 6px;
+        margin-top: 0;
+        margin-bottom: 4px;
+        padding-bottom: 2px;
+      }
+
+      nav::-webkit-scrollbar { display: none; }
+
+      .nav-link {
+        white-space: nowrap;
+        padding: 6px 14px;
+        background: var(--border-subtle);
+        border-radius: 20px;
+        font-size: 0.68rem;
+        transform: none !important;
+      }
+
+      .nav-link::before { display: none; }
+
+      .nav-link.active,
+      .nav-link:hover {
+        background: rgba(79, 209, 197, 0.12);
+        color: var(--accent);
+      }
+
+      section { margin-bottom: 56px; }
+
+      .content {
+        margin-left: 0;
+        padding: 48px 28px 72px;
+        max-width: 100%;
+      }
+
+      .project-hero h1 { font-size: 1.7rem; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .roadmap-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .sidebar { padding: 28px 20px 24px; }
+      .content { padding: 40px 20px 64px; }
+      .project-hero h1 { font-size: 1.45rem; }
+      .hero-meta { gap: 16px; }
+      .pipeline { padding: 24px 20px; }
+      .pipeline-box { min-width: 160px; font-size: 0.8rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .roadmap-grid { grid-template-columns: 1fr; }
+      .screenshots-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+      .sidebar-footer {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .sidebar-footer .btn-back,
+      .sidebar-footer .btn-lang { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── FLOATING ACTIONS (desktop only) ── -->
+  <div class="floating-actions">
+    <a href="/smae-tracker.html" class="btn-lang">EN</a>
+    <a href="/es/" class="btn-back">← Volver al Portafolio</a>
+  </div>
+
+  <div class="layout">
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar">
+      <div>
+        <a href="/es/" class="back-link">Volver al Portafolio</a>
+
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:4px;">
+          <img src="/images/smae-tracker/logo.png" alt="SMAE Tracker logo" style="width:38px; height:38px; border-radius:10px; flex-shrink:0;" />
+          <h1 style="margin:0;">SMAE Tracker</h1>
+        </div>
+        <p class="project-type">Caso de Estudio</p>
+
+        <div class="active-badge">En Desarrollo Activo</div>
+
+        <nav aria-label="Secciones del caso de estudio">
+          <a href="#overview" class="nav-link active">Descripción</a>
+          <a href="#problem" class="nav-link">Problema</a>
+          <a href="#vision" class="nav-link">Visión</a>
+          <a href="#domain-model" class="nav-link">Modelo de Dominio</a>
+          <a href="#food-database" class="nav-link">Base de Alimentos</a>
+          <a href="#challenges" class="nav-link">Desafíos</a>
+          <a href="#features" class="nav-link">Funcionalidades</a>
+          <a href="#architecture" class="nav-link">Arquitectura</a>
+          <a href="#screenshots" class="nav-link">Capturas</a>
+          <a href="#roadmap" class="nav-link">Roadmap</a>
+          <a href="#lessons" class="nav-link">Aprendizajes</a>
+        </nav>
+
+        <!-- Mobile only -->
+        <div class="sidebar-footer">
+          <a href="/smae-tracker.html" class="btn-lang">EN</a>
+          <a href="/es/" class="btn-back">← Volver al Portafolio</a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── MAIN CONTENT ── -->
+    <main class="content">
+
+      <!-- ── HERO ── -->
+      <div class="project-hero" id="overview">
+        <h1>SMAE Tracker</h1>
+        <p class="summary">
+          Una plataforma de seguimiento nutricional construida sobre el Sistema Mexicano de Alimentos
+          Equivalentes (SMAE), que ayuda a los usuarios a seguir planes dietéticos estructurados
+          sin depender exclusivamente del conteo de calorías.
+        </p>
+
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Rol</span>
+            <span class="hero-meta-value">Diseñador de Producto y Desarrollador Principal</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Estado</span>
+            <span class="hero-meta-value active">En Desarrollo Activo</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Tipo</span>
+            <span class="hero-meta-value">Tecnología Nutricional</span>
+          </div>
+        </div>
+
+        <div class="pills">
+          <span class="pill">Tecnología Nutricional</span>
+          <span class="pill">Aplicaciones Móviles</span>
+          <span class="pill">Modelado de Datos</span>
+          <span class="pill">Diseño de Producto</span>
+          <span class="pill">Salud y Bienestar</span>
+          <span class="pill">Experiencia de Usuario</span>
+        </div>
+      </div>
+
+      <!-- ── PROBLEM ── -->
+      <section id="problem">
+        <h2>El Problema</h2>
+        <p>
+          La mayoría de las aplicaciones de seguimiento nutricional están construidas bajo un solo
+          paradigma: el conteo de calorías y macronutrientes. Pero muchos nutriólogos en México
+          prescriben dietas utilizando el
+          <strong style="color: var(--text-primary);">Sistema Mexicano de Alimentos Equivalentes (SMAE)</strong> —
+          un sistema basado en equivalentes donde los alimentos se agrupan en categorías y la dieta
+          se define por cuántos equivalentes de cada grupo puede consumir el paciente por día.
+        </p>
+        <p>
+          Los pacientes que siguen planes basados en SMAE enfrentan problemas frecuentes:
+        </p>
+        <ul>
+          <li>Entender qué es un equivalente y cómo se relaciona con los alimentos reales.</li>
+          <li>Traducir un plan alimentario escrito en decisiones concretas en el supermercado o la cocina.</li>
+          <li>Llevar un registro de los equivalentes consumidos sin una herramienta diseñada para esto.</li>
+          <li>Encontrar sustituciones válidas cuando un alimento específico no está disponible.</li>
+        </ul>
+        <p>
+          Las aplicaciones existentes ignoran el sistema SMAE por completo o requieren que los usuarios
+          calculen equivalentes manualmente, generando fricción que reduce la adherencia dietética.
+        </p>
+      </section>
+
+      <!-- ── VISION ── -->
+      <section id="vision">
+        <h2>Visión del Producto</h2>
+        <p>
+          La visión es hacer que las dietas basadas en equivalentes sean tan sencillas e intuitivas
+          de seguir como las aplicaciones de conteo de calorías — sin que los usuarios necesiten
+          entender la metodología nutricional detrás de ellas.
+        </p>
+        <div class="impact-highlight">
+          <p>Un paciente debe poder buscar cualquier alimento, ver su valor en equivalentes, agregarlo a una comida y saber de un vistazo cuántos equivalentes le quedan en su plan diario — sin ningún cálculo manual.</p>
+        </div>
+        <p>
+          Los usuarios deben poder construir comidas, registrar equivalentes, descubrir sustituciones
+          de alimentos, entender el equilibrio nutricional y seguir los planes de nutrición
+          profesionales — todo dentro de un solo producto diseñado para la forma en que realmente
+          trabajan los nutriólogos mexicanos.
+        </p>
+      </section>
+
+      <!-- ── DOMAIN MODEL ── -->
+      <section id="domain-model">
+        <h2>Modelo de Dominio</h2>
+        <p>
+          Traducir la metodología SMAE a un modelo de dominio de software fue uno de los aspectos
+          más desafiantes y gratificantes del proyecto. Las guías de nutrición están escritas para
+          clínicos, no para sistemas de software, por lo que el dominio requirió una interpretación
+          y formalización cuidadosa.
+        </p>
+
+        <div class="pipeline" style="margin-bottom: 24px;">
+          <div class="pipeline-step">
+            <div class="pipeline-box root">Alimento</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Porción</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Equivalente</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Grupo de Alimentos</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Comida</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box leaf">Plan del Día</div>
+          </div>
+        </div>
+
+        <p>
+          El modelo captura las relaciones entre alimentos individuales, sus porciones estandarizadas,
+          los valores en equivalentes que representan esas porciones, el grupo de alimentos al que
+          pertenece cada equivalente, cómo los equivalentes forman comidas y cómo las comidas
+          componen un plan diario estructurado — todo preservando la consistencia con las guías
+          oficiales del SMAE.
+        </p>
+      </section>
+
+      <!-- ── FOOD DATABASE ── -->
+      <section id="food-database">
+        <h2>Base de Alimentos</h2>
+        <p>
+          La base de alimentos es el fundamento de toda la plataforma. Sin un catálogo de alimentos
+          preciso y bien estructurado, los cálculos de equivalentes y las recomendaciones de
+          sustituciones son poco confiables.
+        </p>
+
+        <div class="cards-grid">
+          <div class="card">
+            <h3>Porciones Estandarizadas</h3>
+            <p>Cada alimento define tamaños de porción canónicos alineados con las guías SMAE, garantizando que los cálculos de equivalentes sean consistentes independientemente de cómo el usuario describa el alimento.</p>
+          </div>
+          <div class="card">
+            <h3>Valores en Equivalentes</h3>
+            <p>Cada porción se mapea a un valor de equivalente explícito dentro de su grupo de alimentos, permitiendo que la app calcule automáticamente los totales de equivalentes conforme el usuario construye sus comidas.</p>
+          </div>
+          <div class="card">
+            <h3>Clasificación por Grupo</h3>
+            <p>Los alimentos se clasifican en las categorías de equivalentes SMAE — cereales, leguminosas, proteínas, grasas, frutas, verduras, lácteos y azúcares — lo cual impulsa tanto la lógica de seguimiento como las recomendaciones de sustitución.</p>
+          </div>
+          <div class="card">
+            <h3>Metadatos de Búsqueda</h3>
+            <p>Los registros incluyen alias, nombres comunes y variantes regionales para que los usuarios puedan encontrar alimentos usando lenguaje cotidiano en lugar de terminología nutricional técnica.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── CHALLENGES ── -->
+      <section id="challenges">
+        <h2>Desafíos del Producto</h2>
+
+        <div class="challenge-card">
+          <h3>Convertir una Metodología Clínica en Software</h3>
+          <p>
+            El sistema SMAE está definido en guías de nutrición escritas para dietistas y clínicos.
+            Los documentos describen categorías de equivalentes, equivalencias de porciones y reglas
+            de grupos de alimentos en lenguaje natural — sin un modelo de datos formal detrás.
+          </p>
+          <div class="challenge-solution">
+            <div class="challenge-solution-label">Solución</div>
+            <p style="margin:0; font-size: 0.9rem; color: var(--text-secondary);">
+              Se formalizó la metodología SMAE en un modelo de dominio explícito con relaciones
+              claras entre entidades, reglas de equivalentes y jerarquías de grupos — tratando la
+              guía de nutrición como una especificación de dominio en lugar de material de referencia.
+            </p>
+          </div>
+        </div>
+
+        <div class="challenge-card">
+          <h3>Estandarización de Alimentos a Escala</h3>
+          <p>
+            El mismo alimento puede aparecer en diferentes preparaciones, descripciones de porciones
+            y nombres regionales. Sin estandarización, la base de datos de equivalentes se vuelve
+            inconsistente y la confianza del usuario se erosiona rápidamente cuando los cálculos
+            no coinciden con lo que espera su nutriólogo.
+          </p>
+          <div class="challenge-solution">
+            <div class="challenge-solution-label">Solución</div>
+            <p style="margin:0; font-size: 0.9rem; color: var(--text-secondary);">
+              Se diseñó un catálogo de alimentos normalizado donde cada registro tiene una porción
+              canónica y un valor de equivalente anclado en las tablas de referencia SMAE, con
+              alias para variantes regionales y de lenguaje común.
+            </p>
+          </div>
+        </div>
+
+        <div class="challenge-card">
+          <h3>Diseñar para Usuarios No Técnicos</h3>
+          <p>
+            Las dietas basadas en equivalentes son inherentemente abstractas. Presentar conteos de
+            equivalentes, presupuestos por grupo y lógica de sustitución a pacientes que quizás
+            nunca han conocido este sistema requiere un diseño UX cuidadoso — el sistema debe
+            ser invisible.
+          </p>
+          <div class="challenge-solution">
+            <div class="challenge-solution-label">Solución</div>
+            <p style="margin:0; font-size: 0.9rem; color: var(--text-secondary);">
+              Se diseñaron interfaces en torno a los objetivos del usuario — "agregar alimento a la
+              comida", "ver qué me queda hoy" — en lugar del modelo subyacente de equivalentes,
+              dejando que la lógica de dominio corra silenciosamente en segundo plano.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── FEATURES ── -->
+      <section id="features">
+        <h2>Funcionalidades Clave</h2>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <div class="feature-title">Seguimiento de Equivalentes</div>
+            <div class="feature-desc">Registra el consumo diario de equivalentes por grupo de alimentos contra el plan diario prescrito.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🍽</div>
+            <div class="feature-title">Planificación de Comidas</div>
+            <div class="feature-desc">Construye comidas desde un catálogo estructurado con cálculo automático de equivalentes.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <div class="feature-title">Búsqueda de Alimentos</div>
+            <div class="feature-desc">Busca cualquier alimento por nombre y ve inmediatamente su valor en equivalentes y grupo de alimentos.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔄</div>
+            <div class="feature-title">Sustituciones de Alimentos</div>
+            <div class="feature-desc">Descubre alimentos equivalentes válidos dentro del mismo grupo para una planificación de comidas flexible.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📈</div>
+            <div class="feature-title">Progreso Diario</div>
+            <div class="feature-desc">Monitorea la adherencia durante el día con una vista clara de los equivalentes restantes por grupo.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── ARCHITECTURE ── -->
+      <section id="architecture">
+        <h2>Arquitectura del Sistema</h2>
+        <p>
+          La plataforma está estructurada alrededor de un pipeline de datos que va desde una
+          base de alimentos curada a través de capas de lógica de negocio hasta el seguimiento
+          y análisis para el usuario.
+        </p>
+
+        <div class="pipeline">
+          <div class="pipeline-step">
+            <div class="pipeline-box root">Base de Alimentos</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Motor de Equivalentes</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Constructor de Comidas</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Rastreador Diario</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box leaf">Análisis de Progreso</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── SCREENSHOTS ── -->
+      <section id="screenshots">
+        <h2>Capturas de Pantalla</h2>
+        <div class="screenshots-grid">
+          <div class="screenshot-item">
+            <img src="/images/smae-tracker/1.jpg" alt="SMAE Tracker — panel de progreso diario mostrando barras de progreso por grupo de equivalentes" loading="lazy" />
+            <div class="screenshot-caption">Progreso Diario</div>
+          </div>
+          <div class="screenshot-item">
+            <img src="/images/smae-tracker/2.jpg" alt="SMAE Tracker — pantalla de registro de alimentos con pestañas de comida y búsqueda" loading="lazy" />
+            <div class="screenshot-caption">Registro de Alimentos</div>
+          </div>
+          <div class="screenshot-item">
+            <img src="/images/smae-tracker/3.jpg" alt="SMAE Tracker — editor de metas diarias mostrando objetivos de equivalentes por grupo" loading="lazy" />
+            <div class="screenshot-caption">Metas Diarias</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── ROADMAP ── -->
+      <section id="roadmap">
+        <h2>Hoja de Ruta</h2>
+        <p>
+          El enfoque actual está en el seguimiento central de equivalentes y la planificación de
+          comidas. Las mejoras planificadas extienden la plataforma hacia casos de uso profesionales
+          y asistidos por IA.
+        </p>
+
+        <div class="roadmap-grid">
+          <div class="roadmap-item">Paneles para nutriólogos</div>
+          <div class="roadmap-item">Plantillas de planes compartidos</div>
+          <div class="roadmap-item">Escaneo de código de barras</div>
+          <div class="roadmap-item">Sugerencias de comidas con IA</div>
+          <div class="roadmap-item">Recomendaciones personalizadas</div>
+          <div class="roadmap-item">Reportes clínicos</div>
+        </div>
+      </section>
+
+      <!-- ── IMPACT ── -->
+      <section id="impact">
+        <h2>Impacto y Resultados</h2>
+        <p>
+          SMAE Tracker busca reducir la complejidad de seguir dietas basadas en equivalentes,
+          transformando una metodología nutricional clínica en un producto digital intuitivo.
+        </p>
+
+        <div class="impact-highlight">
+          <p>Al eliminar el cálculo manual de equivalentes, la plataforma reduce la carga cognitiva diaria para los pacientes — convirtiendo un protocolo dietético complejo en una lista de verificación diaria sencilla.</p>
+        </div>
+
+        <p>
+          La plataforma está diseñada para ayudar a los usuarios a mejorar la adherencia dietética,
+          reducir la fricción en la planificación de comidas, entender sustituciones válidas de
+          alimentos y seguir las recomendaciones del nutriólogo de manera más consistente —
+          sin requerir conocimientos de nutrición.
+        </p>
+      </section>
+
+      <!-- ── LESSONS ── -->
+      <section id="lessons">
+        <h2>Aprendizajes</h2>
+
+        <div class="lessons-list">
+          <div class="lesson-item">
+            <div class="lesson-num">1</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">El diseño orientado al dominio es esencial en aplicaciones de salud.</strong>
+              El dominio SMAE tiene reglas precisas que, si se representan incorrectamente en el
+              modelo, propagan errores en todas las funcionalidades. Definir bien el modelo de
+              dominio antes de escribir cualquier interfaz es la inversión de mayor impacto.
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-num">2</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">Las metodologías expertas necesitan interpretación, no solo digitalización.</strong>
+              Las guías clínicas de nutrición describen qué es verdad, no cómo debe funcionar el
+              software. Traducirlas a código requiere entender la intención detrás de cada regla,
+              no solo mapear las palabras a estructuras de datos.
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-num">3</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">La flexibilidad y la consistencia de datos están en tensión.</strong>
+              Permitir que los usuarios registren cualquier alimento libremente entra en conflicto
+              con la necesidad de cálculos de equivalentes consistentes. La solución es un catálogo
+              curado como fuente de verdad canónica, con extensibilidad controlada.
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-num">4</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">El UX para salud de consumo debe ocultar la complejidad, no exponerla.</strong>
+              El modelo de equivalentes es el motor — los usuarios nunca deberían necesitar
+              entenderlo. Cada pantalla debe responder a "¿qué quiere lograr el usuario ahora?"
+              y no a "¿cómo funciona el sistema subyacente?"
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-num">5</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">Ser dueño del producto significa ser dueño del problema, no solo del código.</strong>
+              Identificar que las dietas basadas en equivalentes eran un área desatendida, definir
+              el modelo de dominio, diseñar el UX y construir el producto son parte del mismo
+              trabajo. La ejecución técnica es necesaria pero no suficiente.
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section[id], .project-hero[id]');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
+
+    sections.forEach(s => observer.observe(s));
+  </script>
+
+</body>
+</html>

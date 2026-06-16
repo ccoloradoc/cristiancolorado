@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AT&T Hackathon México 2016 — Caso de Estudio | Cristian Colorado</title>
+  <meta name="description" content="Caso de estudio: AT&T Hackathon México 2016 — Ganadores nacionales con EMA-IOT, una plataforma de salud conectada. Seleccionados para presentar internacionalmente en el AT&T Developer Summit en Las Vegas." />
+  <meta name="author" content="Cristian Colorado" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/cc.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/cc.png" />
+  <link rel="apple-touch-icon" href="/images/cc.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-primary: #0a192f;
+      --bg-secondary: #020c1b;
+      --text-primary: #ccd6f6;
+      --text-secondary: #8892b0;
+      --accent: #4fd1c5;
+      --border-subtle: #112240;
+      --gold: #fbbf24;
+      --sidebar-width: 320px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+    }
+
+    .floating-actions {
+      position: fixed;
+      top: 24px;
+      right: 28px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .floating-actions .btn-back {
+      background: transparent;
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-decoration: none;
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: 1px solid rgba(79, 209, 197, 0.4);
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+
+    .floating-actions .btn-back:hover {
+      background: rgba(79, 209, 197, 0.08);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
+
+    .btn-lang {
+      background: transparent;
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-decoration: none;
+      padding: 7px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+      letter-spacing: 0.08em;
+      transition: color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-lang:hover {
+      color: var(--accent);
+      border-color: rgba(79, 209, 197, 0.4);
+      text-decoration: none;
+    }
+
+    .layout { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      padding: 72px 48px;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border-subtle);
+      overflow-y: auto;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      margin-bottom: 32px;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .back-link::before { content: '←'; font-size: 0.9rem; }
+
+    .back-link:hover { color: var(--accent); transform: translateX(-3px); text-decoration: none; }
+
+    .sidebar h1 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 0 0 4px;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+
+    .sidebar .project-type {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin: 0 0 32px;
+      letter-spacing: 0.04em;
+    }
+
+    .award-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      background: rgba(251, 191, 36, 0.08);
+      border: 1px solid rgba(251, 191, 36, 0.25);
+      border-radius: 999px;
+      padding: 5px 12px;
+      margin-bottom: 28px;
+    }
+
+    .award-badge::before { content: '🏆'; font-size: 0.8rem; }
+
+    nav { display: flex; flex-direction: column; gap: 2px; }
+
+    .nav-link {
+      position: relative;
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 8px 0 8px 18px;
+      transition: color 0.25s, transform 0.25s;
+    }
+
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      border-radius: 2px;
+      background: var(--accent);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+      opacity: 0;
+    }
+
+    .nav-link:hover { color: var(--text-primary); transform: translateX(6px); text-decoration: none; }
+    .nav-link:hover::before { transform: scaleY(1); opacity: 0.55; }
+    .nav-link.active { color: var(--text-primary); transform: translateX(6px); text-decoration: none; }
+    .nav-link.active::before { transform: scaleY(1); opacity: 1; }
+
+    .sidebar-footer { display: none; }
+
+    .content {
+      margin-left: var(--sidebar-width);
+      padding: 72px 64px 96px;
+      max-width: 760px;
+    }
+
+    section { margin-bottom: 80px; }
+
+    h2 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      margin: 0 0 36px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      white-space: nowrap;
+    }
+
+    h2::after { content: ''; display: block; height: 1px; flex: 1; background: var(--border-subtle); }
+
+    h3 { color: var(--text-primary); font-size: 1rem; font-weight: 600; margin: 0 0 10px; }
+    p { color: var(--text-secondary); margin: 0 0 16px; font-size: 0.95rem; }
+    p:last-child { margin-bottom: 0; }
+    a { color: var(--accent); text-decoration: none; font-weight: 500; }
+    a:hover { text-decoration: underline; }
+    ul { margin: 0 0 16px; padding-left: 20px; color: var(--text-secondary); font-size: 0.93rem; }
+    ul li { margin-bottom: 6px; }
+
+    .project-hero { margin-bottom: 64px; }
+
+    .award-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .project-hero h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0 0 20px;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .award-photo-wrap {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 24px;
+    }
+
+    .award-photo-wrap img { width: 100%; height: auto; display: block; }
+
+    .award-photo-caption {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-top: 10px;
+      font-style: italic;
+      opacity: 0.75;
+    }
+
+    .recognition-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; }
+
+    .recognition-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 10px;
+    }
+
+    .recognition-pill.gold { background: rgba(251, 191, 36, 0.08); border: 1px solid rgba(251, 191, 36, 0.3); color: var(--gold); }
+    .recognition-pill.blue { background: rgba(79, 209, 197, 0.08); border: 1px solid rgba(79, 209, 197, 0.25); color: var(--accent); }
+
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 24px; margin-bottom: 28px; }
+    .hero-meta-item { display: flex; flex-direction: column; gap: 3px; }
+
+    .hero-meta-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    .hero-meta-value { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); }
+
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .pill {
+      background: rgba(79, 209, 197, 0.08);
+      color: var(--accent);
+      border: 1px solid rgba(79, 209, 197, 0.22);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .cards-grid { display: flex; flex-direction: column; gap: 14px; }
+
+    .card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 24px 26px;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover { border-color: rgba(79, 209, 197, 0.3); }
+
+    .card h3 {
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin: 0 0 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .pipeline {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 32px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .pipeline-step { display: flex; flex-direction: column; align-items: center; }
+
+    .pipeline-box {
+      background: rgba(79, 209, 197, 0.07);
+      border: 1px solid rgba(79, 209, 197, 0.25);
+      border-radius: 8px;
+      padding: 10px 24px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-align: center;
+      min-width: 200px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .pipeline-step:hover .pipeline-box { background: rgba(79, 209, 197, 0.12); border-color: rgba(79, 209, 197, 0.5); }
+    .pipeline-box.source { background: rgba(251, 191, 36, 0.08); border-color: rgba(251, 191, 36, 0.3); color: var(--gold); }
+    .pipeline-box.output { background: rgba(74, 222, 128, 0.07); border-color: rgba(74, 222, 128, 0.3); color: #4ade80; }
+    .pipeline-arrow { color: var(--text-secondary); font-size: 1.1rem; margin: 6px 0; opacity: 0.6; }
+
+    .award-result {
+      background: rgba(251, 191, 36, 0.06);
+      border: 1px solid rgba(251, 191, 36, 0.25);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 12px 12px 0;
+      padding: 24px 28px;
+      margin-bottom: 16px;
+    }
+
+    .award-result-line { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+    .award-result-line:last-child { margin-bottom: 0; }
+    .award-result-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+    .award-result-text { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.5; }
+    .award-result-text strong { color: var(--text-primary); }
+
+    .press-grid { display: flex; flex-direction: column; gap: 12px; }
+
+    .press-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 18px 20px;
+      text-decoration: none;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .press-card:hover { border-color: rgba(79, 209, 197, 0.35); transform: translateX(4px); text-decoration: none; }
+
+    .press-outlet {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .press-title { font-size: 0.88rem; font-weight: 600; color: var(--text-primary); line-height: 1.4; margin-bottom: 4px; }
+    .press-date { font-size: 0.75rem; color: var(--text-secondary); }
+
+    .press-arrow {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-left: auto;
+      flex-shrink: 0;
+      align-self: center;
+      opacity: 0.6;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .press-card:hover .press-arrow { opacity: 1; transform: translateX(3px); }
+
+    .lessons-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .lesson-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 16px 18px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      transition: border-color 0.2s;
+    }
+
+    .lesson-item:hover { border-color: rgba(79, 209, 197, 0.25); }
+
+    .lesson-num {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(79, 209, 197, 0.1);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .lesson-text { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.55; }
+
+    .career-timeline { display: flex; flex-direction: column; }
+    .career-item { display: flex; gap: 20px; }
+
+    .career-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+      width: 16px;
+    }
+
+    .career-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(79, 209, 197, 0.2);
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    .career-dot.gold-dot { background: var(--gold); box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2); }
+
+    .career-line {
+      width: 1px;
+      flex: 1;
+      background: var(--border-subtle);
+      margin: 8px 0;
+    }
+
+    .career-item:last-child .career-line { display: none; }
+    .career-body { flex: 1; padding-bottom: 32px; }
+    .career-item:last-child .career-body { padding-bottom: 0; }
+
+    .career-year {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+      margin-bottom: 3px;
+    }
+
+    .career-title { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }
+    .career-desc { font-size: 0.83rem; color: var(--text-secondary); }
+
+    .impact-highlight {
+      background: rgba(251, 191, 36, 0.05);
+      border: 1px solid rgba(251, 191, 36, 0.2);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 10px 10px 0;
+      padding: 18px 22px;
+      margin-bottom: 16px;
+    }
+
+    .impact-highlight p { margin: 0; font-size: 0.92rem; color: var(--text-secondary); }
+
+    @media (max-width: 1024px) {
+      .floating-actions { display: none; }
+
+      .sidebar-footer {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .sidebar-footer .btn-back {
+        display: block;
+        background: transparent;
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 0.82rem;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        border: 1px solid rgba(79, 209, 197, 0.4);
+        transition: background 0.2s;
+        white-space: nowrap;
+      }
+
+      .sidebar-footer .btn-back:hover { background: rgba(79, 209, 197, 0.08); text-decoration: none; }
+      .sidebar-footer .btn-lang { padding: 10px 16px; font-size: 0.82rem; }
+
+      .layout { flex-direction: column; }
+
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        padding: 36px 28px 28px;
+        border-right: none;
+        border-bottom: 1px solid var(--border-subtle);
+        overflow-y: visible;
+      }
+
+      nav {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 6px;
+        margin-top: 0;
+        margin-bottom: 4px;
+        padding-bottom: 2px;
+      }
+
+      nav::-webkit-scrollbar { display: none; }
+
+      .nav-link {
+        white-space: nowrap;
+        padding: 6px 14px;
+        background: var(--border-subtle);
+        border-radius: 20px;
+        font-size: 0.68rem;
+        transform: none !important;
+      }
+
+      .nav-link::before { display: none; }
+      .nav-link.active, .nav-link:hover { background: rgba(79, 209, 197, 0.12); color: var(--accent); }
+
+      section { margin-bottom: 56px; }
+      .content { margin-left: 0; padding: 48px 28px 72px; max-width: 100%; }
+      .project-hero h1 { font-size: 1.6rem; }
+      .pipeline { padding: 24px 20px; }
+      .pipeline-box { min-width: 160px; font-size: 0.8rem; }
+    }
+
+    @media (max-width: 600px) {
+      .sidebar { padding: 28px 20px 24px; }
+      .content { padding: 40px 20px 64px; }
+      .project-hero h1 { font-size: 1.35rem; }
+      .recognition-row { flex-direction: column; }
+      .hero-meta { gap: 16px; }
+      .sidebar-footer { flex-direction: column; align-items: stretch; }
+      .sidebar-footer .btn-back, .sidebar-footer .btn-lang { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="floating-actions">
+    <a href="/att-hackathon.html" class="btn-lang">EN</a>
+    <a href="/es/" class="btn-back">← Volver al Portafolio</a>
+  </div>
+
+  <div class="layout">
+
+    <aside class="sidebar">
+      <div>
+        <a href="/es/" class="back-link">Volver al Portafolio</a>
+
+        <h1>AT&amp;T Hackathon México 2016</h1>
+        <p class="project-type">Caso de Estudio — Premio</p>
+
+        <div class="award-badge">Ganador Nacional</div>
+
+        <nav aria-label="Secciones del caso de estudio">
+          <a href="#award" class="nav-link active">Premio</a>
+          <a href="#challenge" class="nav-link">Reto</a>
+          <a href="#solution" class="nav-link">Solución</a>
+          <a href="#architecture" class="nav-link">Arquitectura</a>
+          <a href="#contributions" class="nav-link">Contribuciones</a>
+          <a href="#outcome" class="nav-link">Resultado</a>
+          <a href="#press" class="nav-link">Prensa</a>
+          <a href="#lessons" class="nav-link">Aprendizajes</a>
+          <a href="#journey" class="nav-link">Trayectoria</a>
+        </nav>
+
+        <div class="sidebar-footer">
+          <a href="/att-hackathon.html" class="btn-lang">EN</a>
+          <a href="/es/" class="btn-back">← Volver al Portafolio</a>
+        </div>
+      </div>
+    </aside>
+
+    <main class="content">
+
+      <!-- AWARD HERO -->
+      <div class="project-hero" id="award">
+        <div class="award-eyebrow">🏆 AT&amp;T Hackathon México 2016</div>
+        <h1>EMA-IOT: Auxilio Médico de Emergencia</h1>
+
+        <div class="recognition-row">
+          <div class="recognition-pill gold">🏆 1er Lugar — Ganador Nacional</div>
+          <div class="recognition-pill blue">🌎 AT&amp;T Developer Summit, Las Vegas</div>
+        </div>
+
+        <div class="award-photo-wrap">
+          <img src="/images/att-hackaton/hackaton.jpg" alt="Equipo ganador en el AT&T 2016 Developer Summit sosteniendo el premio de 1er lugar" />
+        </div>
+        <p class="award-photo-caption">Equipo ganador en el AT&amp;T 2016 Developer Summit — "Premios 1er Lugar"</p>
+
+        <div class="hero-meta" style="margin-top: 24px;">
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Rol</span>
+            <span class="hero-meta-value">Miembro del Equipo y Desarrollador</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Año</span>
+            <span class="hero-meta-value">2016</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Formato</span>
+            <span class="hero-meta-value">Hackathon Nacional</span>
+          </div>
+        </div>
+
+        <div class="pills">
+          <span class="pill">Tecnología en Salud</span>
+          <span class="pill">IoT</span>
+          <span class="pill">Prototipado Rápido</span>
+          <span class="pill">Innovación</span>
+        </div>
+      </div>
+
+      <!-- CHALLENGE -->
+      <section id="challenge">
+        <h2>El Reto</h2>
+        <p>
+          El AT&amp;T Hackathon México desafió a los equipos a diseñar y construir soluciones
+          conectadas e innovadoras capaces de mejorar la vida de las personas a través de la
+          tecnología — en una ventana de competencia muy ajustada.
+        </p>
+        <p>
+          Nuestro equipo se enfocó en un problema de clara urgencia social: los pacientes mayores
+          y vulnerables que pueden requerir intervención médica rápida cuando surgen condiciones
+          críticas de salud no tienen una forma asequible y accesible de señalar angustia y
+          alertar automáticamente a sus cuidadores.
+        </p>
+        <div class="impact-highlight">
+          <p>Cada minuto de retraso en una emergencia médica aumenta el riesgo. Nos preguntamos: ¿qué se necesitaría para reducir ese retraso a segundos usando tecnología conectada?</p>
+        </div>
+      </section>
+
+      <!-- SOLUTION -->
+      <section id="solution">
+        <h2>La Solución — EMA-IOT</h2>
+        <p>
+          Construimos <strong style="color: var(--text-primary);">EMA-IOT (Auxilio Médico de Emergencia)</strong>,
+          una plataforma de salud conectada diseñada para apoyar a pacientes en riesgo mediante
+          monitoreo continuo de signos vitales y respuesta automática ante emergencias.
+        </p>
+        <p>
+          La plataforma fue diseñada para:
+        </p>
+        <ul>
+          <li>Monitorear continuamente los signos vitales del paciente a través de un dispositivo wearable.</li>
+          <li>Detectar condiciones anormales en tiempo real mediante análisis de umbrales.</li>
+          <li>Activar alertas de emergencia automáticamente cuando se superan los umbrales.</li>
+          <li>Notificar a cuidadores y familiares mediante SMS.</li>
+          <li>Proporcionar visibilidad sobre el estado del paciente en cualquier momento.</li>
+        </ul>
+        <p>
+          El objetivo no era reemplazar la atención médica — era garantizar que las emergencias
+          se detectaran y escalaran inmediatamente en lugar de descubrirse demasiado tarde.
+        </p>
+      </section>
+
+      <!-- ARCHITECTURE -->
+      <section id="architecture">
+        <h2>Arquitectura</h2>
+        <p>
+          La solución fue construida como un pipeline conectado — desde la detección del lado
+          del paciente, pasando por el procesamiento de datos, hasta la notificación a cuidadores.
+        </p>
+
+        <div class="pipeline">
+          <div class="pipeline-step">
+            <div class="pipeline-box source">Dispositivo Wearable</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Recolección de Signos Vitales</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Análisis de Umbrales</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Motor de Alertas</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Notificaciones SMS</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box output">Cuidadores y Familiares</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTRIBUTIONS -->
+      <section id="contributions">
+        <h2>Mis Contribuciones</h2>
+        <p>
+          Como miembro del equipo ganador, mis contribuciones abarcaron tanto el desarrollo
+          técnico como la presentación:
+        </p>
+
+        <div class="cards-grid">
+          <div class="card">
+            <h3>Desarrollo de la Aplicación</h3>
+            <p>Contribuí al desarrollo de software de la plataforma, implementando la lógica central de la aplicación y componentes de integración del sistema bajo las restricciones de tiempo del hackathon.</p>
+          </div>
+          <div class="card">
+            <h3>Diseño Técnico</h3>
+            <p>Participé en discusiones de arquitectura de la solución y decisiones de diseño del sistema, ayudando a definir cómo se conectaban los componentes del wearable, backend y notificaciones.</p>
+          </div>
+          <div class="card">
+            <h3>Demo y Presentación</h3>
+            <p>Apoyé la preparación del prototipo y ayudé a comunicar la solución a los jueces durante la competencia — incluyendo la ronda de presentación internacional final.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- OUTCOME -->
+      <section id="outcome">
+        <h2>Resultado de la Competencia</h2>
+
+        <div class="award-result">
+          <div class="award-result-line">
+            <div class="award-result-icon">🏆</div>
+            <div class="award-result-text">
+              <strong>Primer Lugar — AT&amp;T Hackathon México 2016.</strong>
+              Seleccionado como la solución ganadora entre todos los equipos participantes en la competencia nacional.
+            </div>
+          </div>
+          <div class="award-result-line">
+            <div class="award-result-icon">🌎</div>
+            <div class="award-result-text">
+              <strong>Seleccionado para presentación internacional</strong> en el AT&amp;T Developer Summit en Las Vegas — representando a México en la ronda internacional.
+            </div>
+          </div>
+          <div class="award-result-line">
+            <div class="award-result-icon">📰</div>
+            <div class="award-result-text">
+              <strong>Destacado en medios nacionales e industriales</strong>, incluyendo cobertura de El Universal y AT&amp;T News.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRESS -->
+      <section id="press">
+        <h2>Cobertura de Prensa</h2>
+        <p>
+          El proyecto recibió cobertura de publicaciones nacionales e industriales en el momento de la competencia.
+        </p>
+
+        <div class="press-grid">
+          <a href="https://www.eluniversal.com.mx/articulo/cartera/negocios/2016/01/11/ganan-att-hackathon-2016-con-solucion-de-salud/" target="_blank" rel="noopener" class="press-card">
+            <div style="flex: 1;">
+              <div class="press-outlet">El Universal</div>
+              <div class="press-title">Ganan AT&amp;T Hackathon 2016 con solución de salud</div>
+              <div class="press-date">11 de enero de 2016</div>
+            </div>
+            <div class="press-arrow">→</div>
+          </a>
+
+          <a href="https://www.facebook.com/watch/?v=10153367639931342" target="_blank" rel="noopener" class="press-card">
+            <div style="flex: 1;">
+              <div class="press-outlet">AT&amp;T México</div>
+              <div class="press-title">AT&amp;T Developer Summit México — Ceremonia de Premiación del Hackathon (Video)</div>
+              <div class="press-date">2016</div>
+            </div>
+            <div class="press-arrow">→</div>
+          </a>
+        </div>
+      </section>
+
+      <!-- LESSONS -->
+      <section id="lessons">
+        <h2>Aprendizajes</h2>
+        <p>
+          Aunque las tecnologías específicas utilizadas en el prototipo han evolucionado
+          significativamente desde 2016, la experiencia reforzó lecciones que siguen
+          definiendo cómo abordo el desarrollo de productos e ingeniería hoy.
+        </p>
+
+        <div class="lessons-list">
+          <div class="lesson-item">
+            <div class="lesson-num">1</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">La validación rápida obliga a la claridad.</strong>
+              Un hackathon no te da tiempo para over-engineerear. La disciplina de construir algo
+              demostrable en horas — no semanas — es uno de los ejercicios más valiosos para
+              cortar la ambigüedad y enfocarse en lo que realmente importa.
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-num">2</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">Los MVPs ganan por claridad del problema, no por sofisticación técnica.</strong>
+              No ganamos por la tecnología que usamos. Ganamos porque el problema estaba claramente
+              definido y la solución era inmediatamente comprensible. Los jueces responden a
+              soluciones que hacen el problema obvio.
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-num">3</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">Los equipos multidisciplinarios superan a los grupos de una sola disciplina.</strong>
+              Las diferentes perspectivas del equipo — diseño, producto, ingeniería — produjeron
+              una solución más completa de lo que cualquier individuo podría haber construido
+              solo bajo presión.
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-num">4</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">Comunicar soluciones técnicas es una habilidad en sí misma.</strong>
+              Ganar requirió no solo construir la solución sino explicarla claramente a jueces
+              no técnicos. Esa experiencia define cómo presento decisiones de arquitectura y
+              diseño de sistemas a los stakeholders hoy.
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-num">5</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">La tecnología es más poderosa cuando se aplica a problemas humanos reales.</strong>
+              La tecnología en salud y la tecnología cívica — los dominios donde he hecho mi
+              trabajo personal más significativo — exigen que las decisiones de ingeniería
+              comiencen con la persona a la que el sistema está destinado a ayudar.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CAREER JOURNEY -->
+      <section id="journey">
+        <h2>Trayectoria Profesional</h2>
+        <p>
+          Este premio marcó un hito temprano en un patrón de construcción de tecnología
+          con impacto social y de producto medible.
+        </p>
+
+        <div class="career-timeline">
+          <div class="career-item">
+            <div class="career-left">
+              <div class="career-dot gold-dot"></div>
+              <div class="career-line"></div>
+            </div>
+            <div class="career-body">
+              <div class="career-year">2016</div>
+              <div class="career-title">🏆 EMA-IOT — AT&amp;T Hackathon México</div>
+              <div class="career-desc">Ganadores nacionales. Plataforma IoT de salud. Presentación internacional en Las Vegas.</div>
+            </div>
+          </div>
+
+          <div class="career-item">
+            <div class="career-left">
+              <div class="career-dot"></div>
+              <div class="career-line"></div>
+            </div>
+            <div class="career-body">
+              <div class="career-year">2016 – 2018</div>
+              <div class="career-title">🏛 Contacto Legislativo</div>
+              <div class="career-desc">Plataforma de tecnología cívica. Datos abiertos legislativos, pipelines ETL, métricas de transparencia ciudadana.</div>
+            </div>
+          </div>
+
+          <div class="career-item">
+            <div class="career-left">
+              <div class="career-dot"></div>
+              <div class="career-line"></div>
+            </div>
+            <div class="career-body">
+              <div class="career-year">2024</div>
+              <div class="career-title">🤖 Toy Sentinel</div>
+              <div class="career-desc">Plataforma distribuida de monitoreo de retail orientada a eventos. Más de 200 suscriptores en producción.</div>
+            </div>
+          </div>
+
+          <div class="career-item">
+            <div class="career-left">
+              <div class="career-dot"></div>
+              <div class="career-line"></div>
+            </div>
+            <div class="career-body">
+              <div class="career-year">2025</div>
+              <div class="career-title">🥗 SMAE Tracker</div>
+              <div class="career-desc">Producto de tecnología en salud para consumo. Plataforma de seguimiento nutricional orientada al dominio. En desarrollo activo.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section[id], .project-hero[id]');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
+
+    sections.forEach(s => observer.observe(s));
+  </script>
+
+</body>
+</html>

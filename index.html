@@ -172,9 +172,24 @@
     .sidebar .tagline {
       font-size: 0.88rem;
       color: var(--text-secondary);
-      margin: 0;
+      margin: 0 0 18px;
       line-height: 1.65;
       max-width: 220px;
+    }
+
+    .sidebar-credentials {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .sidebar-credential {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     /* ── NAV ── */
@@ -461,6 +476,283 @@
       font-size: 0.88rem;
     }
 
+    /* ── FEATURED PROJECTS ── */
+    .projects-intro {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin: -20px 0 32px;
+      line-height: 1.65;
+    }
+
+    .metrics-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      margin-bottom: 36px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .metric-item {
+      flex: 1;
+      min-width: 120px;
+      padding: 18px 20px;
+      border-right: 1px solid var(--border-subtle);
+      text-align: center;
+    }
+
+    .metric-item:last-child { border-right: none; }
+
+    .metric-item .m-value {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .metric-item .m-label {
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.02em;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .project-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.2s, transform 0.2s;
+      text-decoration: none;
+    }
+
+    .project-card:hover {
+      border-color: rgba(79, 209, 197, 0.4);
+      transform: translateY(-4px);
+      text-decoration: none;
+    }
+
+    .project-card-image {
+      width: 100%;
+      aspect-ratio: 3 / 2;
+      overflow: hidden;
+      background: var(--border-subtle);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .project-card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+
+    .project-card:hover .project-card-image img {
+      transform: scale(1.04);
+    }
+
+    .project-featured-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #0a192f;
+      background: var(--accent);
+      border-radius: 999px;
+      padding: 3px 10px;
+      z-index: 1;
+    }
+
+    .project-card-body {
+      padding: 16px 18px 14px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .project-status {
+      font-size: 0.67rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .project-status.active { color: #4ade80; }
+
+    .project-status.active::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: #4ade80;
+      border-radius: 50%;
+      flex-shrink: 0;
+      animation: pulse 2.5s infinite;
+    }
+
+    .project-status.archived { color: #f6ad55; }
+
+    .project-status.archived::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: #f6ad55;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .project-card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .project-card-stat {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .project-card-tagline {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin: 0 0 12px;
+      line-height: 1.5;
+    }
+
+    .project-card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 12px;
+    }
+
+    .project-card-tag {
+      font-size: 0.67rem;
+      font-weight: 600;
+      color: var(--accent);
+      background: rgba(79, 209, 197, 0.08);
+      border: 1px solid rgba(79, 209, 197, 0.18);
+      border-radius: 999px;
+      padding: 3px 9px;
+      letter-spacing: 0.02em;
+    }
+
+    .project-card-eng {
+      background: rgba(79, 209, 197, 0.04);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-top: auto;
+      margin-bottom: 14px;
+    }
+
+    .project-card-eng-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+      opacity: 0.8;
+    }
+
+    .project-card-eng p {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    .project-card-cta-btn {
+      display: block;
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--accent);
+      border-top: 1px solid var(--border-subtle);
+      padding: 11px 18px;
+      letter-spacing: 0.03em;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .project-card:hover .project-card-cta-btn {
+      background: rgba(79, 209, 197, 0.06);
+    }
+
+    /* ── AWARD CARD ── */
+    .award-card {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      background: rgba(251, 191, 36, 0.05);
+      border: 1px solid rgba(251, 191, 36, 0.22);
+      border-radius: 12px;
+      padding: 20px 22px;
+      text-decoration: none;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .award-card:hover {
+      border-color: rgba(251, 191, 36, 0.45);
+      transform: translateX(5px);
+      text-decoration: none;
+    }
+
+    .award-card-icon {
+      font-size: 1.8rem;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .award-card-body { flex: 1; }
+
+    .award-card-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+    }
+
+    .award-card-sub {
+      font-size: 0.78rem;
+      color: #f6ad55;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .award-card-cta {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: rgba(251, 191, 36, 0.7);
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+
+    .award-card:hover .award-card-cta { color: #fbbf24; }
+
     /* ── MOBILE ── */
     @media (max-width: 1024px) {
       .floating-actions { display: none; }
@@ -565,6 +857,13 @@
         padding: 48px 28px 72px;
         max-width: 100%;
       }
+
+      .projects-grid { grid-template-columns: 1fr; gap: 14px; }
+      .metrics-row { flex-wrap: wrap; }
+      .metric-item { min-width: 50%; border-bottom: 1px solid var(--border-subtle); }
+      .metric-item:nth-child(even) { border-right: none; }
+      .metric-item:nth-last-child(-n+2) { border-bottom: none; }
+      .project-card-image { aspect-ratio: 16 / 9; }
     }
 
     @media (max-width: 600px) {
@@ -609,10 +908,16 @@
         </div>
         <h1>Cristian Colorado</h1>
         <p class="job-title">Senior Software Engineer</p>
-        <p class="tagline">Building payment-critical, high-availability backend systems for Fortune 500 US companies.</p>
+        <p class="tagline">Building products, data platforms, and automation systems.</p>
+        <div class="sidebar-credentials">
+          <span class="sidebar-credential">🏆 Hackathon Winner</span>
+          <span class="sidebar-credential">📱 Product Builder</span>
+          <span class="sidebar-credential">⚙️ Data Engineer</span>
+        </div>
 
         <nav aria-label="Page sections">
           <a href="#about" class="nav-link active">About</a>
+          <a href="#projects" class="nav-link">Projects</a>
           <a href="#expertise" class="nav-link">Expertise</a>
           <a href="#skills" class="nav-link">Skills</a>
           <a href="#experience" class="nav-link">Experience</a>
@@ -649,6 +954,104 @@
           engineering teams — and an MBA in Entrepreneurship that bridges technical depth with
           business context.
         </p>
+      </section>
+
+      <section id="projects">
+        <h2>Featured Projects</h2>
+        <p class="projects-intro">
+          A selection of products and platforms I've built — from health technology
+          and civic data to real-time monitoring systems.
+        </p>
+
+        <div class="metrics-row">
+          <div class="metric-item">
+            <div class="m-value">3</div>
+            <div class="m-label">Products Built</div>
+          </div>
+          <div class="metric-item">
+            <div class="m-value">200+</div>
+            <div class="m-label">Active Users</div>
+          </div>
+          <div class="metric-item">
+            <div class="m-value">3</div>
+            <div class="m-label">Domains</div>
+          </div>
+          <div class="metric-item">
+            <div class="m-value">17+</div>
+            <div class="m-label">Years Experience</div>
+          </div>
+        </div>
+
+        <div class="projects-grid">
+
+          <!-- SMAE Tracker -->
+          <a href="/smae-tracker.html" class="project-card">
+            <div class="project-card-image">
+              <span class="project-featured-badge">Featured</span>
+              <img src="/images/smae-tracker/1.jpg" alt="SMAE Tracker daily progress dashboard" loading="lazy" />
+            </div>
+            <div class="project-card-body">
+              <div class="project-status active">Active Development</div>
+              <div class="project-card-title">SMAE Tracker</div>
+              <div class="project-card-stat">Nutrition & Health Technology</div>
+              <div class="project-card-tagline">Exchange-based meal tracking platform built around the Mexican Food Exchange System.</div>
+              <div class="project-card-tags">
+                <span class="project-card-tag">Health Tech</span>
+                <span class="project-card-tag">Mobile</span>
+              </div>
+              <div class="project-card-eng">
+                <div class="project-card-eng-label">Engineering Highlight</div>
+                <p>Domain model built around the SMAE exchange methodology, translating a clinical nutrition system into a scalable software architecture.</p>
+              </div>
+            </div>
+            <div class="project-card-cta-btn">View Case Study →</div>
+          </a>
+
+          <!-- Toy Sentinel -->
+          <a href="/toy-sentinel.html" class="project-card">
+            <div class="project-card-image">
+              <img src="/images/toy-sentinel/1.png" alt="Toy Sentinel Telegram channel notifications" loading="lazy" />
+            </div>
+            <div class="project-card-body">
+              <div class="project-status active">Active — Production</div>
+              <div class="project-card-title">Toy Sentinel</div>
+              <div class="project-card-stat">200+ Active Subscribers</div>
+              <div class="project-card-tagline">Real-time product monitoring and alert platform for collectible toy enthusiasts.</div>
+              <div class="project-card-tags">
+                <span class="project-card-tag">Distributed Systems</span>
+                <span class="project-card-tag">Automation</span>
+              </div>
+              <div class="project-card-eng">
+                <div class="project-card-eng-label">Engineering Highlight</div>
+                <p>Redis-backed event pipeline decoupling multi-retailer scraping from asynchronous Telegram delivery.</p>
+              </div>
+            </div>
+            <div class="project-card-cta-btn">View Case Study →</div>
+          </a>
+
+          <!-- Contacto Legislativo -->
+          <a href="/contacto-legislativo.html" class="project-card">
+            <div class="project-card-image">
+              <img src="/images/contacto/one.png" alt="Contacto Legislativo — promotional infographic showing legislative statistics" loading="lazy" />
+            </div>
+            <div class="project-card-body">
+              <div class="project-status archived">Archived</div>
+              <div class="project-card-title">Contacto Legislativo</div>
+              <div class="project-card-stat">Government Open Data Platform</div>
+              <div class="project-card-tagline">Legislative transparency platform built from publicly available Mexican government data.</div>
+              <div class="project-card-tags">
+                <span class="project-card-tag">Data Engineering</span>
+                <span class="project-card-tag">Civic Tech</span>
+              </div>
+              <div class="project-card-eng">
+                <div class="project-card-eng-label">Engineering Highlight</div>
+                <p>Automated ETL pipeline that scraped, normalized, and enriched legislative open data into citizen-facing transparency metrics.</p>
+              </div>
+            </div>
+            <div class="project-card-cta-btn">View Case Study →</div>
+          </a>
+
+        </div>
       </section>
 
       <section id="expertise">
@@ -851,19 +1254,26 @@
 
       <section id="recognition">
         <h2>Certifications &amp; Awards</h2>
+
         <div class="skill-group">
-          <div class="skill-group-label">Oracle Java Certifications</div>
+          <div class="skill-group-label">Certifications</div>
           <div class="pills">
             <span class="pill">OCP Java SE 8</span>
             <span class="pill">OCP Java SE 6</span>
             <span class="pill">OCA Java SE 8</span>
           </div>
         </div>
-        <div class="skill-group">
+
+        <div class="skill-group" style="margin-bottom: 0;">
           <div class="skill-group-label">Awards</div>
-          <div class="pills">
-            <span class="pill">🏆 Best Overall App — AT&amp;T Hackathon, Guadalajara</span>
-          </div>
+          <a href="/att-hackathon.html" class="award-card">
+            <div class="award-card-icon">🏆</div>
+            <div class="award-card-body">
+              <div class="award-card-title">AT&amp;T Hackathon Mexico Winner</div>
+              <div class="award-card-sub">National Winner &nbsp;·&nbsp; International Finalist — Las Vegas</div>
+              <div class="award-card-cta">Read Story →</div>
+            </div>
+          </a>
         </div>
       </section>
 

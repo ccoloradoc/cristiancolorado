@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contacto Legislativo — Caso de Estudio | Cristian Colorado</title>
+  <meta name="description" content="Caso de estudio: Contacto Legislativo — plataforma de tecnología cívica que transformó datos legislativos públicos mexicanos en paneles amigables para la ciudadanía e indicadores de desempeño para diputados." />
+  <meta name="author" content="Cristian Colorado" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/cc.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/cc.png" />
+  <link rel="apple-touch-icon" href="/images/cc.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-primary: #0a192f;
+      --bg-secondary: #020c1b;
+      --text-primary: #ccd6f6;
+      --text-secondary: #8892b0;
+      --accent: #4fd1c5;
+      --border-subtle: #112240;
+      --sidebar-width: 320px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+    }
+
+    .floating-actions {
+      position: fixed;
+      top: 24px;
+      right: 28px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .floating-actions .btn-back {
+      background: transparent;
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-decoration: none;
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: 1px solid rgba(79, 209, 197, 0.4);
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+
+    .floating-actions .btn-back:hover {
+      background: rgba(79, 209, 197, 0.08);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
+
+    .btn-lang {
+      background: transparent;
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-decoration: none;
+      padding: 7px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+      letter-spacing: 0.08em;
+      transition: color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-lang:hover {
+      color: var(--accent);
+      border-color: rgba(79, 209, 197, 0.4);
+      text-decoration: none;
+    }
+
+    .layout { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      padding: 72px 48px;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border-subtle);
+      overflow-y: auto;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      margin-bottom: 32px;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+      transform: translateX(-3px);
+      text-decoration: none;
+    }
+
+    .back-link::before { content: '←'; font-size: 0.9rem; }
+
+    .sidebar h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0 0 4px;
+      color: var(--text-primary);
+      line-height: 1.25;
+    }
+
+    .sidebar .project-type {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin: 0 0 32px;
+      letter-spacing: 0.04em;
+    }
+
+    .archived-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #f6ad55;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      background: rgba(246, 173, 85, 0.1);
+      border: 1px solid rgba(246, 173, 85, 0.25);
+      border-radius: 999px;
+      padding: 5px 12px;
+      margin-bottom: 28px;
+    }
+
+    .archived-badge::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      background: #f6ad55;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    nav { display: flex; flex-direction: column; gap: 2px; }
+
+    .nav-link {
+      position: relative;
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 8px 0 8px 18px;
+      transition: color 0.25s, transform 0.25s;
+    }
+
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      border-radius: 2px;
+      background: var(--accent);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+      opacity: 0;
+    }
+
+    .nav-link:hover { color: var(--text-primary); transform: translateX(6px); text-decoration: none; }
+    .nav-link:hover::before { transform: scaleY(1); opacity: 0.55; }
+    .nav-link.active { color: var(--text-primary); transform: translateX(6px); text-decoration: none; }
+    .nav-link.active::before { transform: scaleY(1); opacity: 1; }
+
+    .sidebar-footer { display: none; }
+
+    .content {
+      margin-left: var(--sidebar-width);
+      padding: 72px 64px 96px;
+      max-width: 760px;
+    }
+
+    section { margin-bottom: 80px; }
+
+    h2 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      margin: 0 0 36px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      white-space: nowrap;
+    }
+
+    h2::after {
+      content: '';
+      display: block;
+      height: 1px;
+      flex: 1;
+      background: var(--border-subtle);
+    }
+
+    h3 { color: var(--text-primary); font-size: 1rem; font-weight: 600; margin: 0 0 10px; }
+    p { color: var(--text-secondary); margin: 0 0 16px; font-size: 0.95rem; }
+    p:last-child { margin-bottom: 0; }
+    a { color: var(--accent); text-decoration: none; font-weight: 500; }
+    a:hover { text-decoration: underline; }
+    ul { margin: 0 0 16px; padding-left: 20px; color: var(--text-secondary); font-size: 0.93rem; }
+    ul li { margin-bottom: 6px; }
+
+    .project-hero { margin-bottom: 64px; }
+
+    .project-hero h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin: 0 0 14px;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .project-hero .summary {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      margin: 0 0 28px;
+      max-width: 580px;
+      line-height: 1.75;
+    }
+
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 24px; margin-bottom: 28px; }
+    .hero-meta-item { display: flex; flex-direction: column; gap: 3px; }
+
+    .hero-meta-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    .hero-meta-value { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); }
+    .hero-meta-value.archived { color: #f6ad55; }
+
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .pill {
+      background: rgba(79, 209, 197, 0.08);
+      color: var(--accent);
+      border: 1px solid rgba(79, 209, 197, 0.22);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 24px 26px;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover { border-color: rgba(79, 209, 197, 0.3); }
+
+    .card h3 {
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin: 0 0 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .cards-grid { display: flex; flex-direction: column; gap: 14px; }
+
+    .pipeline {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 36px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .pipeline-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      width: 100%;
+    }
+
+    .pipeline-box {
+      background: rgba(79, 209, 197, 0.07);
+      border: 1px solid rgba(79, 209, 197, 0.25);
+      border-radius: 8px;
+      padding: 10px 24px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: 0.02em;
+      text-align: center;
+      min-width: 260px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .pipeline-step:hover .pipeline-box { background: rgba(79, 209, 197, 0.12); border-color: rgba(79, 209, 197, 0.5); }
+    .pipeline-box.source { background: rgba(79, 209, 197, 0.12); border-color: rgba(79, 209, 197, 0.4); color: var(--accent); }
+    .pipeline-box.output { background: rgba(74, 222, 128, 0.07); border-color: rgba(74, 222, 128, 0.3); color: #4ade80; }
+    .pipeline-arrow { color: var(--text-secondary); font-size: 1.1rem; line-height: 1; margin: 6px 0; opacity: 0.6; }
+
+    .challenge-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 24px 26px;
+      margin-bottom: 14px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .challenge-card:hover { border-color: rgba(79, 209, 197, 0.3); transform: translateX(4px); }
+    .challenge-card:last-child { margin-bottom: 0; }
+    .challenge-card h3 { color: var(--text-primary); font-size: 0.95rem; font-weight: 600; margin: 0 0 10px; }
+
+    .challenge-solution {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .challenge-solution-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .metrics-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+
+    .metric-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 18px 20px;
+      transition: border-color 0.2s;
+    }
+
+    .metric-card:hover { border-color: rgba(79, 209, 197, 0.3); }
+    .metric-icon { font-size: 1.2rem; margin-bottom: 8px; }
+    .metric-label { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4; }
+
+    .tech-group { margin-bottom: 24px; }
+    .tech-group:last-child { margin-bottom: 0; }
+
+    .tech-group-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+    }
+
+    .lessons-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .lesson-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 16px 18px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      transition: border-color 0.2s;
+    }
+
+    .lesson-item:hover { border-color: rgba(79, 209, 197, 0.25); }
+
+    .lesson-num {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(79, 209, 197, 0.1);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      letter-spacing: 0;
+      margin-top: 1px;
+    }
+
+    .lesson-text { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.55; }
+
+    .gallery-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 16px;
+    }
+
+    .screenshots-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .screenshot-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .screenshot-item:hover { border-color: rgba(79, 209, 197, 0.35); transform: translateY(-3px); }
+    .screenshot-item img { width: 100%; height: auto; display: block; }
+
+    .infographic-wrap {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .infographic-wrap:hover { border-color: rgba(79, 209, 197, 0.35); }
+
+    .infographic-wrap img { max-width: 320px; width: 100%; height: auto; display: block; }
+
+    .asset-caption {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      text-align: center;
+      font-style: italic;
+      opacity: 0.75;
+    }
+
+    .impact-highlight {
+      background: rgba(74, 222, 128, 0.05);
+      border: 1px solid rgba(74, 222, 128, 0.2);
+      border-left: 3px solid #4ade80;
+      border-radius: 0 10px 10px 0;
+      padding: 20px 24px;
+      margin-bottom: 14px;
+    }
+
+    .impact-highlight p { margin: 0; font-size: 0.92rem; color: var(--text-secondary); }
+
+    @media (max-width: 600px) {
+      .screenshots-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 1024px) {
+      .floating-actions { display: none; }
+
+      .sidebar-footer {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .sidebar-footer .btn-back {
+        display: block;
+        background: transparent;
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 0.82rem;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-align: center;
+        border: 1px solid rgba(79, 209, 197, 0.4);
+        transition: background 0.2s, border-color 0.2s, transform 0.15s;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+      }
+
+      .sidebar-footer .btn-back:hover {
+        background: rgba(79, 209, 197, 0.08);
+        border-color: var(--accent);
+        text-decoration: none;
+      }
+
+      .sidebar-footer .btn-lang { padding: 10px 16px; font-size: 0.82rem; }
+
+      .layout { flex-direction: column; }
+
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        padding: 36px 28px 28px;
+        border-right: none;
+        border-bottom: 1px solid var(--border-subtle);
+        overflow-y: visible;
+      }
+
+      nav {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 6px;
+        margin-top: 0;
+        margin-bottom: 4px;
+        padding-bottom: 2px;
+      }
+
+      nav::-webkit-scrollbar { display: none; }
+
+      .nav-link {
+        white-space: nowrap;
+        padding: 6px 14px;
+        background: var(--border-subtle);
+        border-radius: 20px;
+        font-size: 0.68rem;
+        transform: none !important;
+      }
+
+      .nav-link::before { display: none; }
+      .nav-link.active, .nav-link:hover { background: rgba(79, 209, 197, 0.12); color: var(--accent); }
+
+      section { margin-bottom: 56px; }
+      .content { margin-left: 0; padding: 48px 28px 72px; max-width: 100%; }
+      .project-hero h1 { font-size: 1.7rem; }
+      .pipeline-box { min-width: 200px; }
+      .metrics-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .sidebar { padding: 28px 20px 24px; }
+      .content { padding: 40px 20px 64px; }
+      .project-hero h1 { font-size: 1.45rem; }
+      .hero-meta { gap: 16px; }
+      .pipeline { padding: 24px 20px; }
+      .pipeline-box { min-width: 160px; font-size: 0.8rem; }
+      .metrics-grid { grid-template-columns: 1fr; }
+      .sidebar-footer { flex-direction: column; align-items: stretch; }
+      .sidebar-footer .btn-back, .sidebar-footer .btn-lang { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="floating-actions">
+    <a href="/contacto-legislativo.html" class="btn-lang">EN</a>
+    <a href="/es/" class="btn-back">← Volver al Portafolio</a>
+  </div>
+
+  <div class="layout">
+
+    <aside class="sidebar">
+      <div>
+        <a href="/es/" class="back-link">Volver al Portafolio</a>
+
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:4px;">
+          <img src="/images/contacto/logo.png" alt="Contacto Legislativo logo" style="width:38px; height:38px; border-radius:10px; flex-shrink:0;" />
+          <h1 style="margin:0;">Contacto Legislativo</h1>
+        </div>
+        <p class="project-type">Caso de Estudio</p>
+
+        <div class="archived-badge">Archivado</div>
+
+        <nav aria-label="Secciones del caso de estudio">
+          <a href="#overview" class="nav-link active">Descripción</a>
+          <a href="#problem" class="nav-link">Problema</a>
+          <a href="#architecture" class="nav-link">Arquitectura</a>
+          <a href="#data-engineering" class="nav-link">Pipeline de Datos</a>
+          <a href="#challenges" class="nav-link">Desafíos</a>
+          <a href="#metrics" class="nav-link">Métricas</a>
+          <a href="#impact" class="nav-link">Impacto</a>
+          <a href="#tech-stack" class="nav-link">Tecnologías</a>
+          <a href="#lessons" class="nav-link">Aprendizajes</a>
+        </nav>
+
+        <div class="sidebar-footer">
+          <a href="/contacto-legislativo.html" class="btn-lang">EN</a>
+          <a href="/es/" class="btn-back">← Volver al Portafolio</a>
+        </div>
+      </div>
+    </aside>
+
+    <main class="content">
+
+      <!-- ── HERO ── -->
+      <div class="project-hero" id="overview">
+        <h1>Contacto Legislativo</h1>
+        <p class="summary">
+          Una plataforma de tecnología cívica que transformó información legislativa pública
+          en indicadores de desempeño y paneles accesibles para la ciudadanía, centrada
+          en la Cámara de Diputados de México.
+        </p>
+
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Rol</span>
+            <span class="hero-meta-value">Desarrollador Principal</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Estado</span>
+            <span class="hero-meta-value archived">Archivado</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Tipo</span>
+            <span class="hero-meta-value">Tecnología Cívica</span>
+          </div>
+        </div>
+
+        <div class="pills">
+          <span class="pill">Web Scraping</span>
+          <span class="pill">Ingeniería de Datos</span>
+          <span class="pill">ETL</span>
+          <span class="pill">Desarrollo Backend</span>
+          <span class="pill">Tecnología Cívica</span>
+          <span class="pill">Visualización de Datos</span>
+        </div>
+      </div>
+
+      <!-- ── PROBLEM ── -->
+      <section id="problem">
+        <h2>El Problema</h2>
+        <p>
+          La información legislativa pública en México estaba técnicamente disponible pero era
+          prácticamente inaccesible. Los ciudadanos que querían entender a sus representantes
+          enfrentaban un panorama fragmentado de sitios web gubernamentales, formatos de documentos
+          inconsistentes y ninguna vista consolidada del desempeño.
+        </p>
+        <p>
+          Preguntas básicas no tenían respuesta sencilla:
+        </p>
+        <ul>
+          <li>¿Quién representa a mi distrito?</li>
+          <li>¿Qué tan activo es mi representante?</li>
+          <li>¿Qué iniciativas ha presentado?</li>
+          <li>¿Está cumpliendo con los requisitos de transparencia?</li>
+        </ul>
+        <p>
+          Responder cualquiera de estas preguntas requería navegar múltiples sitios gubernamentales
+          y revisar documentos manualmente — una barrera que en la práctica mantenía a los ciudadanos
+          desconectados de su propio proceso legislativo. El objetivo era consolidar y simplificar
+          el acceso a esta información.
+        </p>
+      </section>
+
+      <!-- ── ARCHITECTURE ── -->
+      <section id="architecture">
+        <h2>Arquitectura del Pipeline de Datos</h2>
+        <p>
+          La plataforma fue construida alrededor de un pipeline de datos automatizado que llevaba
+          los datos gubernamentales en bruto a través de varias etapas de procesamiento antes de
+          llegar a la ciudadanía.
+        </p>
+
+        <div class="pipeline">
+          <div class="pipeline-step">
+            <div class="pipeline-box source">Fuentes Oficiales de la Cámara de Diputados</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Web Scrapers</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Extracción de Datos</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Normalización de Datos</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Modelo de Datos Unificado</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Generación de Métricas</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box output">Paneles y Reportes para Ciudadanos</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── DATA ENGINEERING ── -->
+      <section id="data-engineering">
+        <h2>Ingeniería de Datos</h2>
+        <p>
+          El componente técnicamente más significativo de la plataforma fue el pipeline de datos
+          automatizado. Los scrapers personalizados recopilaban información legislativa directamente
+          de fuentes públicas oficiales — sin ninguna API ni feed de datos estructurado disponible.
+        </p>
+        <p>
+          La información extraída pasaba por un proceso ETL de múltiples etapas antes de almacenarse
+          en el modelo de datos unificado utilizado en toda la aplicación:
+        </p>
+
+        <div class="cards-grid">
+          <div class="card">
+            <h3>Extracción</h3>
+            <p>Scrapers personalizados navegaban sitios gubernamentales para recopilar datos legislativos en bruto, manejando paginación, estado de sesión y marcado inconsistente en distintos periodos.</p>
+          </div>
+          <div class="card">
+            <h3>Limpieza y Validación</h3>
+            <p>Los datos en bruto eran validados por completitud y consistencia. Los campos faltantes, registros duplicados y anomalías de formato se detectaban y resolvían antes de la transformación.</p>
+          </div>
+          <div class="card">
+            <h3>Normalización</h3>
+            <p>Los datos de diferentes periodos legislativos y formatos fuente se mapeaban a modelos de dominio canónicos, permitiendo consultas unificadas en todo el historial del dataset.</p>
+          </div>
+          <div class="card">
+            <h3>Enriquecimiento y Métricas</h3>
+            <p>Se calculaban indicadores derivados de los datos normalizados — puntuaciones de actividad, tasas de cumplimiento de transparencia y mapeos de distrito que no existían en ningún sistema fuente.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── CHALLENGES ── -->
+      <section id="challenges">
+        <h2>Desafíos Técnicos</h2>
+
+        <div class="challenge-card">
+          <h3>Sitios Gubernamentales No Diseñados para Automatización</h3>
+          <p>
+            Los sitios web públicos estaban construidos para consumo humano. Las páginas dependían
+            de estado de sesión, renderizado con JavaScript, estructura HTML inconsistente entre
+            periodos legislativos y no tenían identificadores estables para los registros — haciendo
+            que la extracción automatizada fuera poco confiable.
+          </p>
+          <div class="challenge-solution">
+            <div class="challenge-solution-label">Solución</div>
+            <p style="margin:0; font-size: 0.9rem; color: var(--text-secondary);">
+              Se desarrolló lógica de extracción personalizada por fuente, capaz de navegar
+              estructuras inconsistentes, mantener contexto de sesión y recuperarse con gracia
+              de fallos parciales sin corromper el dataset.
+            </p>
+          </div>
+        </div>
+
+        <div class="challenge-card">
+          <h3>Formatos de Datos Inconsistentes entre Periodos Legislativos</h3>
+          <p>
+            La información aparecía en diferentes formatos dependiendo del periodo legislativo y
+            de qué sección del sitio provenía. El mismo diputado podía aparecer con distintas
+            grafías en su nombre, códigos de distrito o afiliaciones de partido en distintas fuentes.
+          </p>
+          <div class="challenge-solution">
+            <div class="challenge-solution-label">Solución</div>
+            <p style="margin:0; font-size: 0.9rem; color: var(--text-secondary);">
+              Se creó una capa de normalización con reglas de mapeo explícitas y un modelo de
+              dominio canónico que reconciliaba la identidad entre fuentes, permitiendo consultas
+              confiables entre periodos.
+            </p>
+          </div>
+        </div>
+
+        <div class="challenge-card">
+          <h3>Métricas Derivadas que No Existían en los Sistemas Fuente</h3>
+          <p>
+            Los indicadores ciudadanos — puntuaciones de actividad, tasas de cumplimiento de
+            transparencia, conteos de iniciativas por categoría — no estaban disponibles en
+            ninguna parte. Debían calcularse a partir de los datos en bruto recolectados mediante
+            lógica de negocio específica del dominio.
+          </p>
+          <div class="challenge-solution">
+            <div class="challenge-solution-label">Solución</div>
+            <p style="margin:0; font-size: 0.9rem; color: var(--text-secondary);">
+              Se diseñó una capa de generación de métricas que calculaba todos los indicadores
+              derivados desde el modelo de datos unificado, separando la lógica de negocio del
+              almacenamiento y facilitando la evolución de las definiciones de métricas.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── METRICS ── -->
+      <section id="metrics">
+        <h2>Métricas y Analítica</h2>
+        <p>
+          Todos los indicadores ciudadanos fueron generados por la plataforma a partir de datos de
+          actividad legislativa procesados — ninguno existía como punto de datos listo para usar
+          en los sistemas fuente.
+        </p>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-icon">📊</div>
+            <div class="metric-label">Porcentaje de diputados sin iniciativas registradas</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">✅</div>
+            <div class="metric-label">Tasa de cumplimiento de declaración de transparencia</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">📋</div>
+            <div class="metric-label">Indicadores de actividad legislativa por diputado</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">📁</div>
+            <div class="metric-label">Conteo de iniciativas por categoría y periodo</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">🏛️</div>
+            <div class="metric-label">Participación en comisiones y asistencia</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">📍</div>
+            <div class="metric-label">Consulta de representación por distrito</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── IMPACT ── -->
+      <section id="impact">
+        <h2>Impacto</h2>
+        <p>
+          La plataforma transformó información pública fragmentada en análisis cívico accesible.
+          Por primera vez, los ciudadanos podían responder preguntas básicas sobre sus representantes
+          sin navegar la burocracia gubernamental.
+        </p>
+
+        <div class="impact-highlight">
+          <p>Los ciudadanos podían identificar a su representante, revisar su actividad legislativa, consultar indicadores de rendición de cuentas y verificar el cumplimiento de transparencia — todo en un solo lugar.</p>
+        </div>
+
+        <p>
+          El resultado fue una reducción significativa del esfuerzo necesario para entender el
+          desempeño de los representantes, mejorando directamente el acceso a información pública
+          para la ciudadanía común.
+        </p>
+        <p>
+          Aunque el proyecto está archivado, demostró que la tecnología cívica puede tender puentes
+          entre los datos gubernamentales públicamente disponibles y los ciudadanos a quienes
+          representan — un modelo aplicable a cualquier jurisdicción con registros legislativos abiertos.
+        </p>
+
+        <!-- ── GALLERY ── -->
+        <div style="margin-top: 36px;">
+          <div class="gallery-label">Capturas de la Aplicación</div>
+          <div class="screenshots-grid">
+            <div class="screenshot-item">
+              <img src="/images/contacto/one.png" alt="Contacto Legislativo — pantalla de búsqueda de diputado por distrito" loading="lazy" />
+            </div>
+            <div class="screenshot-item">
+              <img src="/images/contacto/two.png" alt="Contacto Legislativo — indicador de financiamiento de partido e iniciativas cívicas" loading="lazy" />
+            </div>
+          </div>
+          <div class="gallery-label" style="margin-top: 28px;">Infografía Promocional</div>
+          <div class="infographic-wrap">
+            <img src="/images/contacto/contacto_legislativo_cmp1_black.png" alt="Contacto Legislativo — infografía promocional original con estadísticas de actividad legislativa" loading="lazy" />
+          </div>
+          <p class="asset-caption">Material promocional histórico utilizado durante la fase activa de Contacto Legislativo.</p>
+        </div>
+      </section>
+
+      <!-- ── TECH STACK ── -->
+      <section id="tech-stack">
+        <h2>Tecnologías y Arquitectura</h2>
+
+        <div class="tech-group">
+          <div class="tech-group-label">Recolección de Datos</div>
+          <div class="pills">
+            <span class="pill">Scrapers Personalizados</span>
+            <span class="pill">Automatización HTTP</span>
+            <span class="pill">Parsing de HTML</span>
+          </div>
+        </div>
+
+        <div class="tech-group">
+          <div class="tech-group-label">Procesamiento</div>
+          <div class="pills">
+            <span class="pill">Pipelines ETL</span>
+            <span class="pill">Normalización de Datos</span>
+            <span class="pill">Modelado de Dominio</span>
+            <span class="pill">Cálculo de Métricas</span>
+          </div>
+        </div>
+
+        <div class="tech-group">
+          <div class="tech-group-label">Backend</div>
+          <div class="pills">
+            <span class="pill">Java</span>
+            <span class="pill">Spring</span>
+            <span class="pill">REST APIs</span>
+          </div>
+        </div>
+
+        <div class="tech-group">
+          <div class="tech-group-label">Persistencia</div>
+          <div class="pills">
+            <span class="pill">Base de Datos SQL</span>
+            <span class="pill">Modelado Relacional</span>
+          </div>
+        </div>
+
+        <div class="tech-group">
+          <div class="tech-group-label">Presentación</div>
+          <div class="pills">
+            <span class="pill">Aplicación Web</span>
+            <span class="pill">Paneles de Control</span>
+            <span class="pill">Visualización de Datos</span>
+            <span class="pill">Reportes</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── LESSONS ── -->
+      <section id="lessons">
+        <h2>Aprendizajes</h2>
+
+        <div class="lessons-list">
+          <div class="lesson-item">
+            <div class="lesson-num">1</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">Los scrapers resilientes requieren diseño defensivo desde el principio.</strong>
+              Los sitios gubernamentales cambian sin previo aviso. Construir lógica de extracción
+              que falle de forma visible — en lugar de producir silenciosamente datos corruptos —
+              es esencial para cualquier operación de scraping de largo plazo.
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-num">2</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">Los datasets públicos imperfectos requieren contratos de datos explícitos.</strong>
+              Trabajar con datos gubernamentales reales significa aceptar la inconsistencia como
+              punto de partida. Definir reglas de normalización explícitas y modelos canónicos
+              desde el inicio evita que esas inconsistencias se filtren a la lógica de la aplicación.
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-num">3</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">Los pipelines ETL deben ser probables de forma independiente.</strong>
+              Cada etapa del pipeline — extracción, normalización, enriquecimiento — debe ser
+              verificable de forma aislada. Acoplar etapas hace casi imposible diagnosticar
+              dónde se originan los problemas de calidad de datos.
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-num">4</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">Traducir datos complejos en métricas simples es el problema de producto más difícil.</strong>
+              El reto de ingeniería no es el pipeline — es decidir qué indicadores importan a los
+              ciudadanos y cómo presentarlos sin distorsionar los datos subyacentes. El conocimiento
+              del dominio y la perspectiva del usuario son tan importantes como la habilidad técnica.
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-num">5</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">La tecnología puede mejorar significativamente la participación cívica.</strong>
+              Hacer que la información pública sea genuinamente accesible — no solo técnicamente
+              disponible — cambia la forma en que los ciudadanos interactúan con su gobierno. El
+              mismo patrón aplica a cualquier dominio donde existan datos abiertos en bruto pero
+              ninguna interfaz usable.
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section[id], .project-hero[id]');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
+
+    sections.forEach(s => observer.observe(s));
+  </script>
+
+</body>
+</html>

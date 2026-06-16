@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMAE Tracker — Case Study | Cristian Colorado</title>
+  <meta name="description" content="Case study: SMAE Tracker — a nutrition tracking platform built around the Mexican Food Exchange System (SMAE), designed to simplify exchange-based meal planning and dietary adherence." />
+  <meta name="author" content="Cristian Colorado" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/cc.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/cc.png" />
+  <link rel="apple-touch-icon" href="/images/cc.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-primary: #0a192f;
+      --bg-secondary: #020c1b;
+      --text-primary: #ccd6f6;
+      --text-secondary: #8892b0;
+      --accent: #4fd1c5;
+      --border-subtle: #112240;
+      --sidebar-width: 320px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+    }
+
+    /* ── FLOATING ACTIONS ── */
+    .floating-actions {
+      position: fixed;
+      top: 24px;
+      right: 28px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .floating-actions .btn-back {
+      background: transparent;
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-decoration: none;
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: 1px solid rgba(79, 209, 197, 0.4);
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+
+    .floating-actions .btn-back:hover {
+      background: rgba(79, 209, 197, 0.08);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
+
+    .btn-lang {
+      background: transparent;
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-decoration: none;
+      padding: 7px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+      letter-spacing: 0.08em;
+      transition: color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-lang:hover {
+      color: var(--accent);
+      border-color: rgba(79, 209, 197, 0.4);
+      text-decoration: none;
+    }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      padding: 72px 48px;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border-subtle);
+      overflow-y: auto;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      margin-bottom: 32px;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+      transform: translateX(-3px);
+      text-decoration: none;
+    }
+
+    .back-link::before {
+      content: '←';
+      font-size: 0.9rem;
+    }
+
+    .sidebar h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0 0 4px;
+      color: var(--text-primary);
+      line-height: 1.25;
+    }
+
+    .sidebar .project-type {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin: 0 0 32px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── ACTIVE BADGE ── */
+    .active-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #4ade80;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      background: rgba(74, 222, 128, 0.08);
+      border: 1px solid rgba(74, 222, 128, 0.22);
+      border-radius: 999px;
+      padding: 5px 12px;
+      margin-bottom: 28px;
+    }
+
+    .active-badge::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      background: #4ade80;
+      border-radius: 50%;
+      flex-shrink: 0;
+      animation: pulse 2.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); }
+      50% { opacity: 0.6; box-shadow: 0 0 0 5px rgba(74, 222, 128, 0); }
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nav-link {
+      position: relative;
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 8px 0 8px 18px;
+      transition: color 0.25s, transform 0.25s;
+    }
+
+    .nav-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      border-radius: 2px;
+      background: var(--accent);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+      opacity: 0;
+    }
+
+    .nav-link:hover {
+      color: var(--text-primary);
+      transform: translateX(6px);
+      text-decoration: none;
+    }
+
+    .nav-link:hover::before {
+      transform: scaleY(1);
+      opacity: 0.55;
+    }
+
+    .nav-link.active {
+      color: var(--text-primary);
+      transform: translateX(6px);
+      text-decoration: none;
+    }
+
+    .nav-link.active::before {
+      transform: scaleY(1);
+      opacity: 1;
+    }
+
+    .sidebar-footer { display: none; }
+
+    /* ── MAIN CONTENT ── */
+    .content {
+      margin-left: var(--sidebar-width);
+      padding: 72px 64px 96px;
+      max-width: 760px;
+    }
+
+    section {
+      margin-bottom: 80px;
+    }
+
+    h2 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      margin: 0 0 36px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      white-space: nowrap;
+    }
+
+    h2::after {
+      content: '';
+      display: block;
+      height: 1px;
+      flex: 1;
+      background: var(--border-subtle);
+    }
+
+    h3 {
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0 0 10px;
+    }
+
+    p {
+      color: var(--text-secondary);
+      margin: 0 0 16px;
+      font-size: 0.95rem;
+    }
+
+    p:last-child { margin-bottom: 0; }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    a:hover { text-decoration: underline; }
+
+    ul {
+      margin: 0 0 16px;
+      padding-left: 20px;
+      color: var(--text-secondary);
+      font-size: 0.93rem;
+    }
+
+    ul li { margin-bottom: 6px; }
+
+    /* ── HERO ── */
+    .project-hero {
+      margin-bottom: 64px;
+    }
+
+    .project-hero h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin: 0 0 14px;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .project-hero .summary {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      margin: 0 0 28px;
+      max-width: 580px;
+      line-height: 1.75;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .hero-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .hero-meta-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    .hero-meta-value {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .hero-meta-value.active {
+      color: #4ade80;
+    }
+
+    /* ── PILLS ── */
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill {
+      background: rgba(79, 209, 197, 0.08);
+      color: var(--accent);
+      border: 1px solid rgba(79, 209, 197, 0.22);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 24px 26px;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: rgba(79, 209, 197, 0.3);
+    }
+
+    .card h3 {
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin: 0 0 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .cards-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* ── FEATURE CARDS ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 12px;
+    }
+
+    .feature-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 20px 22px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(79, 209, 197, 0.3);
+      transform: translateY(-3px);
+    }
+
+    .feature-icon {
+      font-size: 1.35rem;
+      margin-bottom: 10px;
+    }
+
+    .feature-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .feature-desc {
+      font-size: 0.83rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ── PIPELINE / DOMAIN DIAGRAM ── */
+    .pipeline {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 36px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .pipeline-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .pipeline-box {
+      background: rgba(79, 209, 197, 0.07);
+      border: 1px solid rgba(79, 209, 197, 0.25);
+      border-radius: 8px;
+      padding: 10px 24px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: 0.02em;
+      text-align: center;
+      min-width: 200px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .pipeline-step:hover .pipeline-box {
+      background: rgba(79, 209, 197, 0.12);
+      border-color: rgba(79, 209, 197, 0.5);
+    }
+
+    .pipeline-box.root {
+      background: rgba(79, 209, 197, 0.12);
+      border-color: rgba(79, 209, 197, 0.4);
+      color: var(--accent);
+    }
+
+    .pipeline-box.leaf {
+      background: rgba(74, 222, 128, 0.07);
+      border-color: rgba(74, 222, 128, 0.3);
+      color: #4ade80;
+    }
+
+    .pipeline-arrow {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin: 6px 0;
+      opacity: 0.6;
+    }
+
+    /* ── CHALLENGE CARDS ── */
+    .challenge-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 24px 26px;
+      margin-bottom: 14px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .challenge-card:hover {
+      border-color: rgba(79, 209, 197, 0.3);
+      transform: translateX(4px);
+    }
+
+    .challenge-card:last-child { margin-bottom: 0; }
+
+    .challenge-card h3 {
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin: 0 0 10px;
+    }
+
+    .challenge-solution {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .challenge-solution-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    /* ── ROADMAP ── */
+    .roadmap-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    .roadmap-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 9px;
+      padding: 14px 16px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      transition: border-color 0.2s;
+    }
+
+    .roadmap-item:hover {
+      border-color: rgba(79, 209, 197, 0.22);
+    }
+
+    .roadmap-item::before {
+      content: '→';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-size: 0.8rem;
+      margin-top: 1px;
+    }
+
+    /* ── IMPACT HIGHLIGHT ── */
+    .impact-highlight {
+      background: rgba(74, 222, 128, 0.05);
+      border: 1px solid rgba(74, 222, 128, 0.2);
+      border-left: 3px solid #4ade80;
+      border-radius: 0 10px 10px 0;
+      padding: 20px 24px;
+      margin-bottom: 14px;
+    }
+
+    .impact-highlight p {
+      margin: 0;
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+    }
+
+    /* ── TECH STACK ── */
+    .tech-group {
+      margin-bottom: 24px;
+    }
+
+    .tech-group:last-child { margin-bottom: 0; }
+
+    .tech-group-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+    }
+
+    /* ── LESSONS ── */
+    .lessons-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .lesson-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 16px 18px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      transition: border-color 0.2s;
+    }
+
+    .lesson-item:hover {
+      border-color: rgba(79, 209, 197, 0.25);
+    }
+
+    .lesson-num {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(79, 209, 197, 0.1);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      letter-spacing: 0;
+      margin-top: 1px;
+    }
+
+    .lesson-text {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    /* ── GALLERY ── */
+    .gallery-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 16px;
+    }
+
+    .screenshots-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .screenshot-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .screenshot-item:hover {
+      border-color: rgba(79, 209, 197, 0.35);
+      transform: translateY(-4px);
+    }
+
+    .screenshot-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .screenshot-caption {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-align: center;
+      padding: 10px 8px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 1024px) {
+      .floating-actions { display: none; }
+
+      .sidebar-footer {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .sidebar-footer .btn-back {
+        display: block;
+        background: transparent;
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 0.82rem;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-align: center;
+        border: 1px solid rgba(79, 209, 197, 0.4);
+        transition: background 0.2s, border-color 0.2s;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+      }
+
+      .sidebar-footer .btn-back:hover {
+        background: rgba(79, 209, 197, 0.08);
+        border-color: var(--accent);
+        text-decoration: none;
+      }
+
+      .layout { flex-direction: column; }
+
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        padding: 36px 28px 28px;
+        border-right: none;
+        border-bottom: 1px solid var(--border-subtle);
+        overflow-y: visible;
+      }
+
+      nav {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 6px;
+        margin-top: 0;
+        margin-bottom: 4px;
+        padding-bottom: 2px;
+      }
+
+      nav::-webkit-scrollbar { display: none; }
+
+      .nav-link {
+        white-space: nowrap;
+        padding: 6px 14px;
+        background: var(--border-subtle);
+        border-radius: 20px;
+        font-size: 0.68rem;
+        transform: none !important;
+      }
+
+      .nav-link::before { display: none; }
+
+      .nav-link.active,
+      .nav-link:hover {
+        background: rgba(79, 209, 197, 0.12);
+        color: var(--accent);
+      }
+
+      section { margin-bottom: 56px; }
+
+      .content {
+        margin-left: 0;
+        padding: 48px 28px 72px;
+        max-width: 100%;
+      }
+
+      .project-hero h1 { font-size: 1.7rem; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .roadmap-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .sidebar { padding: 28px 20px 24px; }
+      .content { padding: 40px 20px 64px; }
+      .project-hero h1 { font-size: 1.45rem; }
+      .hero-meta { gap: 16px; }
+      .pipeline { padding: 24px 20px; }
+      .pipeline-box { min-width: 160px; font-size: 0.8rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .roadmap-grid { grid-template-columns: 1fr; }
+      .screenshots-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+      .sidebar-footer {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .sidebar-footer .btn-back,
+      .sidebar-footer .btn-lang { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── FLOATING ACTIONS (desktop only) ── -->
+  <div class="floating-actions">
+    <a href="/es/smae-tracker.html" class="btn-lang">ES</a>
+    <a href="/" class="btn-back">← Back to Portfolio</a>
+  </div>
+
+  <div class="layout">
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar">
+      <div>
+        <a href="/" class="back-link">Back to Portfolio</a>
+
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:4px;">
+          <img src="/images/smae-tracker/logo.png" alt="SMAE Tracker logo" style="width:38px; height:38px; border-radius:10px; flex-shrink:0;" />
+          <h1 style="margin:0;">SMAE Tracker</h1>
+        </div>
+        <p class="project-type">Portfolio Case Study</p>
+
+        <div class="active-badge">Active Development</div>
+
+        <nav aria-label="Case study sections">
+          <a href="#overview" class="nav-link active">Overview</a>
+          <a href="#problem" class="nav-link">Problem</a>
+          <a href="#vision" class="nav-link">Vision</a>
+          <a href="#domain-model" class="nav-link">Domain Model</a>
+          <a href="#food-database" class="nav-link">Food Database</a>
+          <a href="#challenges" class="nav-link">Challenges</a>
+          <a href="#features" class="nav-link">Features</a>
+          <a href="#architecture" class="nav-link">Architecture</a>
+          <a href="#screenshots" class="nav-link">Screenshots</a>
+          <a href="#roadmap" class="nav-link">Roadmap</a>
+          <a href="#lessons" class="nav-link">Lessons</a>
+        </nav>
+
+        <!-- Mobile only -->
+        <div class="sidebar-footer">
+          <a href="/es/smae-tracker.html" class="btn-lang">ES</a>
+          <a href="/" class="btn-back">← Back to Portfolio</a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── MAIN CONTENT ── -->
+    <main class="content">
+
+      <!-- ── HERO ── -->
+      <div class="project-hero" id="overview">
+        <h1>SMAE Tracker</h1>
+        <p class="summary">
+          A nutrition tracking platform built around the Mexican Food Exchange System (SMAE),
+          helping users follow structured dietary plans without relying exclusively on calorie counting.
+        </p>
+
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Role</span>
+            <span class="hero-meta-value">Product Designer &amp; Lead Developer</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Status</span>
+            <span class="hero-meta-value active">Active Development</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Type</span>
+            <span class="hero-meta-value">Nutrition Technology</span>
+          </div>
+        </div>
+
+        <div class="pills">
+          <span class="pill">Nutrition Technology</span>
+          <span class="pill">Mobile Applications</span>
+          <span class="pill">Data Modeling</span>
+          <span class="pill">Product Design</span>
+          <span class="pill">Health &amp; Wellness</span>
+          <span class="pill">User Experience</span>
+        </div>
+      </div>
+
+      <!-- ── PROBLEM ── -->
+      <section id="problem">
+        <h2>The Problem</h2>
+        <p>
+          Many nutrition tracking applications are built around a single paradigm: calorie and
+          macro counting. But many nutritionists in Mexico prescribe diets using the
+          <strong style="color: var(--text-primary);">Sistema Mexicano de Alimentos Equivalentes (SMAE)</strong> —
+          an exchange-based system where foods are grouped into categories, and a diet is defined
+          by how many exchanges from each group a patient may consume per day.
+        </p>
+        <p>
+          Patients following SMAE-based plans routinely struggle with:
+        </p>
+        <ul>
+          <li>Understanding what an exchange is and how it relates to actual food.</li>
+          <li>Translating a written meal plan into daily decisions at the grocery store or kitchen.</li>
+          <li>Tracking how many exchanges they have consumed — without a tool designed for this.</li>
+          <li>Finding valid food substitutions when a specific item isn't available.</li>
+        </ul>
+        <p>
+          Existing apps either ignore the SMAE system entirely or require users to manually
+          calculate exchanges — creating friction that reduces dietary adherence.
+        </p>
+      </section>
+
+      <!-- ── VISION ── -->
+      <section id="vision">
+        <h2>Product Vision</h2>
+        <p>
+          The vision is to make exchange-based diets as simple and intuitive to follow as
+          calorie-based applications — without requiring users to understand the nutritional
+          methodology behind them.
+        </p>
+        <div class="impact-highlight">
+          <p>A patient should be able to look up any food, see its exchange value, add it to a meal, and know at a glance how many exchanges remain in their daily plan — with no manual calculation required.</p>
+        </div>
+        <p>
+          Users should be able to build meals, track exchanges, discover food substitutions,
+          understand nutritional balance, and follow professional nutrition plans — all within
+          a single product designed for the way Mexican nutritionists actually work.
+        </p>
+      </section>
+
+      <!-- ── DOMAIN MODEL ── -->
+      <section id="domain-model">
+        <h2>Domain Model</h2>
+        <p>
+          Translating the SMAE methodology into a software domain model was one of the most
+          challenging and rewarding aspects of the project. Nutrition guides are written for
+          clinicians — not for software systems — so the domain required careful interpretation
+          and formalization.
+        </p>
+
+        <div class="pipeline" style="margin-bottom: 24px;">
+          <div class="pipeline-step">
+            <div class="pipeline-box root">Food</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Portion</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Exchange</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Food Group</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Meal</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box leaf">Day Plan</div>
+          </div>
+        </div>
+
+        <p>
+          The model captures the relationships between individual foods, their standardized portions,
+          the exchange values those portions represent, the food group each exchange belongs to,
+          how exchanges combine into meals, and how meals compose a structured daily plan —
+          all while preserving consistency with official SMAE guidelines.
+        </p>
+      </section>
+
+      <!-- ── FOOD DATABASE ── -->
+      <section id="food-database">
+        <h2>Food Database</h2>
+        <p>
+          The food database is the foundation of the entire platform. Without an accurate,
+          well-structured food catalog, exchange calculations and substitution recommendations
+          are unreliable.
+        </p>
+
+        <div class="cards-grid">
+          <div class="card">
+            <h3>Standardized Portions</h3>
+            <p>Each food entry defines canonical serving sizes aligned with SMAE guidelines, ensuring exchange calculations are consistent regardless of how the food is described by the user.</p>
+          </div>
+          <div class="card">
+            <h3>Exchange Values</h3>
+            <p>Every portion maps to an explicit exchange value within its food group, enabling the app to automatically compute exchange totals as users build meals.</p>
+          </div>
+          <div class="card">
+            <h3>Food Group Classification</h3>
+            <p>Foods are classified into SMAE exchange categories — cereals, legumes, proteins, fats, fruits, vegetables, dairy, and sugars — which drives both tracking logic and substitution recommendations.</p>
+          </div>
+          <div class="card">
+            <h3>Search Metadata</h3>
+            <p>Entries include aliases, common names, and regional variants so users can find foods using everyday language rather than technical nutritional terminology.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── CHALLENGES ── -->
+      <section id="challenges">
+        <h2>Product Challenges</h2>
+
+        <div class="challenge-card">
+          <h3>Converting a Clinical Methodology into Software</h3>
+          <p>
+            The SMAE system is defined in nutrition guides written for dietitians and clinicians.
+            The documents describe exchange categories, portion equivalences, and food group rules
+            in natural language — with no formal data model behind them.
+          </p>
+          <div class="challenge-solution">
+            <div class="challenge-solution-label">Solution</div>
+            <p style="margin:0; font-size: 0.9rem; color: var(--text-secondary);">
+              Formalized the SMAE methodology into an explicit domain model with clear entity
+              relationships, exchange rules, and group hierarchies — treating the nutrition guide
+              as a domain specification rather than reference material.
+            </p>
+          </div>
+        </div>
+
+        <div class="challenge-card">
+          <h3>Food Standardization at Scale</h3>
+          <p>
+            The same food can appear in different preparations, portion descriptions, and regional
+            names. Without standardization, the exchange database becomes inconsistent and user
+            trust erodes quickly when calulations don't match their nutritionist's expectations.
+          </p>
+          <div class="challenge-solution">
+            <div class="challenge-solution-label">Solution</div>
+            <p style="margin:0; font-size: 0.9rem; color: var(--text-secondary);">
+              Designed a normalized food catalog where each entry has a canonical portion and
+              exchange value anchored to the SMAE reference tables, with aliasing for regional
+              and common-language variants.
+            </p>
+          </div>
+        </div>
+
+        <div class="challenge-card">
+          <h3>Designing for Non-Technical Users</h3>
+          <p>
+            Exchange-based diets are inherently abstract. Presenting exchange counts, group
+            budgets, and substitution logic to patients who may never have encountered this
+            system before requires careful UX design — the system must be invisible.
+          </p>
+          <div class="challenge-solution">
+            <div class="challenge-solution-label">Solution</div>
+            <p style="margin:0; font-size: 0.9rem; color: var(--text-secondary);">
+              Designed interfaces around user goals — "add food to meal," "see what I have left
+              today" — rather than around the underlying exchange model, letting the domain logic
+              run silently in the background.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── FEATURES ── -->
+      <section id="features">
+        <h2>Key Features</h2>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <div class="feature-title">Exchange Tracking</div>
+            <div class="feature-desc">Track daily exchange consumption by food group against a prescribed daily plan.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🍽</div>
+            <div class="feature-title">Meal Planning</div>
+            <div class="feature-desc">Build meals from a structured food catalog with automatic exchange calculation.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <div class="feature-title">Food Search</div>
+            <div class="feature-desc">Look up any food by name and immediately see its exchange value and food group.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔄</div>
+            <div class="feature-title">Food Substitutions</div>
+            <div class="feature-desc">Discover valid equivalent foods within the same exchange group for flexible meal planning.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📈</div>
+            <div class="feature-title">Daily Progress</div>
+            <div class="feature-desc">Monitor adherence throughout the day with a clear view of remaining exchanges per group.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── ARCHITECTURE ── -->
+      <section id="architecture">
+        <h2>System Architecture</h2>
+        <p>
+          The platform is structured around a data pipeline that moves from a curated food
+          database through business logic layers to user-facing tracking and analytics.
+        </p>
+
+        <div class="pipeline">
+          <div class="pipeline-step">
+            <div class="pipeline-box root">Food Database</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Exchange Engine</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Meal Builder</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box">Daily Tracker</div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="pipeline-box leaf">Progress Analytics</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── SCREENSHOTS ── -->
+      <section id="screenshots">
+        <h2>Screenshots</h2>
+        <div class="screenshots-grid">
+          <div class="screenshot-item">
+            <img src="/images/smae-tracker/1.jpg" alt="SMAE Tracker — daily progress dashboard showing exchange group progress bars" loading="lazy" />
+            <div class="screenshot-caption">Daily Progress</div>
+          </div>
+          <div class="screenshot-item">
+            <img src="/images/smae-tracker/2.jpg" alt="SMAE Tracker — food log screen with meal tabs and food search" loading="lazy" />
+            <div class="screenshot-caption">Food Log</div>
+          </div>
+          <div class="screenshot-item">
+            <img src="/images/smae-tracker/3.jpg" alt="SMAE Tracker — daily goals editor showing all SMAE exchange group targets" loading="lazy" />
+            <div class="screenshot-caption">Daily Goals</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── ROADMAP ── -->
+      <section id="roadmap">
+        <h2>Future Roadmap</h2>
+        <p>
+          The current focus is on core exchange tracking and meal planning. Planned enhancements
+          extend the platform toward professional and AI-assisted use cases.
+        </p>
+
+        <div class="roadmap-grid">
+          <div class="roadmap-item">Nutritionist dashboards</div>
+          <div class="roadmap-item">Shared diet plan templates</div>
+          <div class="roadmap-item">Barcode scanning</div>
+          <div class="roadmap-item">AI-assisted meal suggestions</div>
+          <div class="roadmap-item">Personalized recommendations</div>
+          <div class="roadmap-item">Clinical reporting</div>
+        </div>
+      </section>
+
+      <!-- ── IMPACT ── -->
+      <section id="impact">
+        <h2>Impact &amp; Outcomes</h2>
+        <p>
+          SMAE Tracker aims to reduce the complexity of following exchange-based diets by
+          transforming a clinical nutrition methodology into an intuitive digital product.
+        </p>
+
+        <div class="impact-highlight">
+          <p>By eliminating manual exchange calculation, the platform reduces the daily cognitive load for patients — turning a complex diet protocol into a simple daily checklist.</p>
+        </div>
+
+        <p>
+          The platform is designed to help users improve dietary adherence, reduce meal-planning
+          friction, understand valid food substitutions, and follow nutritionist recommendations
+          more consistently — without requiring nutrition expertise.
+        </p>
+      </section>
+
+      <!-- ── LESSONS ── -->
+      <section id="lessons">
+        <h2>Lessons Learned</h2>
+
+        <div class="lessons-list">
+          <div class="lesson-item">
+            <div class="lesson-num">1</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">Domain-driven design is essential for health applications.</strong>
+              The SMAE domain has precise rules that, if misrepresented in the model, propagate
+              errors into every feature. Getting the domain model right early — before writing
+              any UI — is the highest-leverage investment in a project like this.
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-num">2</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">Expert methodologies need interpretation, not just digitization.</strong>
+              Clinical nutrition guides describe what is true, not how software should work.
+              Translating them into code requires understanding the intent behind each rule,
+              not just mapping the words to data structures.
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-num">3</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">Flexibility and data consistency are in tension.</strong>
+              Allowing users to log any food freely conflicts with the need for consistent
+              exchange calculations. The solution is a curated catalog as the canonical source
+              of truth, with controlled extensibility rather than free-form input.
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-num">4</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">Consumer health UX must hide complexity, not expose it.</strong>
+              The exchange model is the engine — users should never need to understand it.
+              Every screen should be answerable with "what does the user want to accomplish
+              right now?" not "how does the underlying system work?"
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-num">5</div>
+            <div class="lesson-text">
+              <strong style="color: var(--text-primary);">Product ownership means owning the problem, not just the code.</strong>
+              Identifying that exchange-based diets were underserved by existing apps, defining
+              the domain model, designing the UX, and building the product are all part of the
+              same job. Technical execution is necessary but not sufficient.
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section[id], .project-hero[id]');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
+
+    sections.forEach(s => observer.observe(s));
+  </script>
+
+</body>
+</html>
