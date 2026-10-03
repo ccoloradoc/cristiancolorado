@@ -626,7 +626,9 @@
         <div class="pills">
           <span class="pill">Node.js</span>
           <span class="pill">MongoDB</span>
-          <span class="pill">Redis</span>
+          <span class="pill">AWS Lambda</span>
+          <span class="pill">Amazon EventBridge</span>
+          <span class="pill">Amazon SQS</span>
           <span class="pill">Telegram API</span>
           <span class="pill">Web Scraping</span>
           <span class="pill">Arquitectura Orientada a Eventos</span>
@@ -693,7 +695,8 @@
           </div>
           <div class="pipeline-arrow">↓</div>
           <div class="pipeline-step">
-            <div class="pipeline-box">Scrapers</div>
+            <div class="pipeline-box">Scrapers en Lambda</div>
+            <div class="pipeline-sublabel">Activados por EventBridge</div>
           </div>
           <div class="pipeline-arrow">↓</div>
           <div class="pipeline-step">
@@ -717,12 +720,12 @@
           </div>
           <div class="pipeline-arrow">↓</div>
           <div class="pipeline-step">
-            <div class="pipeline-box queue">Cola Redis</div>
+            <div class="pipeline-box queue">Cola SQS</div>
             <div class="pipeline-sublabel">Desacopla scraping de entrega</div>
           </div>
           <div class="pipeline-arrow">↓</div>
           <div class="pipeline-step">
-            <div class="pipeline-box">Consumidor Telegram</div>
+            <div class="pipeline-box">Consumidor Telegram (Lambda)</div>
             <div class="pipeline-sublabel">Entrega asíncrona con rate limiting</div>
           </div>
           <div class="pipeline-arrow">↓</div>
@@ -783,7 +786,7 @@
           <div class="challenge-solution">
             <div class="challenge-solution-label">Solución</div>
             <p style="margin:0; font-size: 0.9rem; color: var(--text-secondary);">
-              Se introdujo una cola de mensajes respaldada por Redis entre la generación de
+              Se introdujo una cola de mensajes (hoy Amazon SQS) entre la generación de
               eventos y la entrega. El consumidor de Telegram procesa la cola de forma asíncrona
               a una velocidad controlada, desacoplando completamente el throughput del cadencio
               de scraping.
@@ -820,7 +823,7 @@
           <div class="feature-card">
             <div class="feature-icon">🚦</div>
             <div class="feature-title">Entrega por Cola</div>
-            <div class="feature-desc">La cola Redis desacopla el scraping de la entrega de mensajes, previniendo fallos por límite de rate y habilitando lógica de reintento.</div>
+            <div class="feature-desc">La cola SQS desacopla el scraping de la entrega de mensajes, previniendo fallos por límite de rate y habilitando lógica de reintento.</div>
           </div>
           <div class="feature-card">
             <div class="feature-icon">📲</div>
@@ -889,6 +892,7 @@
           <div class="tech-group-label">Scraping y Extracción</div>
           <div class="pills">
             <span class="pill">Node.js</span>
+            <span class="pill">AWS Lambda</span>
             <span class="pill">Scrapers Personalizados</span>
             <span class="pill">Parsing de HTML</span>
             <span class="pill">Adaptadores por Retailer</span>
@@ -900,7 +904,8 @@
           <div class="pills">
             <span class="pill">Motor de Detección de Cambios</span>
             <span class="pill">Deduplicación de Eventos</span>
-            <span class="pill">Cola Redis</span>
+            <span class="pill">Amazon EventBridge</span>
+            <span class="pill">Amazon SQS</span>
             <span class="pill">Consumidores Asíncronos</span>
           </div>
         </div>
@@ -926,7 +931,7 @@
         <div class="tech-group">
           <div class="tech-group-label">Operaciones</div>
           <div class="pills">
-            <span class="pill">Servicios de Larga Duración</span>
+            <span class="pill">Serverless (AWS Lambda)</span>
             <span class="pill">Recuperación de Errores</span>
             <span class="pill">Monitoreo</span>
           </div>
@@ -943,7 +948,7 @@
             <div class="lesson-text">
               <strong style="color: var(--text-primary);">El desacoplamiento no es una optimización — es un requisito de confiabilidad.</strong>
               Conectar el scraping directamente a la entrega de notificaciones significa que un
-              fallo de la API de Telegram detiene todo el pipeline. La cola Redis no se añadió
+              fallo de la API de Telegram detiene todo el pipeline. La cola no se añadió
               por escala; se añadió porque el sistema no podía sobrevivir sin ella.
             </div>
           </div>

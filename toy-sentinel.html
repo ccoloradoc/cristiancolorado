@@ -876,7 +876,9 @@
         <div class="pills">
           <span class="pill">Node.js</span>
           <span class="pill">MongoDB</span>
-          <span class="pill">Redis</span>
+          <span class="pill">AWS Lambda</span>
+          <span class="pill">Amazon EventBridge</span>
+          <span class="pill">Amazon SQS</span>
           <span class="pill">Telegram API</span>
           <span class="pill">Web Scraping</span>
           <span class="pill">Event-Driven Architecture</span>
@@ -942,7 +944,8 @@
           </div>
           <div class="pipeline-arrow">↓</div>
           <div class="pipeline-step">
-            <div class="pipeline-box">Scrapers</div>
+            <div class="pipeline-box">Lambda Scrapers</div>
+            <div class="pipeline-sublabel">Triggered by EventBridge</div>
           </div>
           <div class="pipeline-arrow">↓</div>
           <div class="pipeline-step">
@@ -966,12 +969,12 @@
           </div>
           <div class="pipeline-arrow">↓</div>
           <div class="pipeline-step">
-            <div class="pipeline-box queue">Redis Queue</div>
+            <div class="pipeline-box queue">SQS Queue</div>
             <div class="pipeline-sublabel">Decouples scraping from delivery</div>
           </div>
           <div class="pipeline-arrow">↓</div>
           <div class="pipeline-step">
-            <div class="pipeline-box">Telegram Consumer</div>
+            <div class="pipeline-box">Telegram Consumer (Lambda)</div>
             <div class="pipeline-sublabel">Rate-limited async delivery</div>
           </div>
           <div class="pipeline-arrow">↓</div>
@@ -1029,7 +1032,7 @@
           <div class="challenge-solution">
             <div class="challenge-solution-label">Solution</div>
             <p style="margin:0; font-size: 0.9rem; color: var(--text-secondary);">
-              Introduced a Redis-backed message queue between event generation and delivery.
+              Introduced a message queue (now Amazon SQS) between event generation and delivery.
               The Telegram consumer processes the queue asynchronously at a controlled rate,
               fully decoupling throughput from scraping cadence.
             </p>
@@ -1065,7 +1068,7 @@
           <div class="feature-card">
             <div class="feature-icon">🚦</div>
             <div class="feature-title">Queue-Based Delivery</div>
-            <div class="feature-desc">Redis queue decouples scraping from message delivery, preventing rate-limit failures and enabling retry logic.</div>
+            <div class="feature-desc">SQS queue decouples scraping from message delivery, preventing rate-limit failures and enabling retry logic.</div>
           </div>
           <div class="feature-card">
             <div class="feature-icon">📲</div>
@@ -1134,6 +1137,7 @@
           <div class="tech-group-label">Scraping &amp; Extraction</div>
           <div class="pills">
             <span class="pill">Node.js</span>
+            <span class="pill">AWS Lambda</span>
             <span class="pill">Custom Scrapers</span>
             <span class="pill">HTML Parsing</span>
             <span class="pill">Retailer-Specific Adapters</span>
@@ -1145,7 +1149,8 @@
           <div class="pills">
             <span class="pill">Change Detection Engine</span>
             <span class="pill">Event Deduplication</span>
-            <span class="pill">Redis Queue</span>
+            <span class="pill">Amazon EventBridge</span>
+            <span class="pill">Amazon SQS</span>
             <span class="pill">Async Consumers</span>
           </div>
         </div>
@@ -1171,7 +1176,7 @@
         <div class="tech-group">
           <div class="tech-group-label">Operations</div>
           <div class="pills">
-            <span class="pill">Long-Running Services</span>
+            <span class="pill">Serverless (AWS Lambda)</span>
             <span class="pill">Error Recovery</span>
             <span class="pill">Monitoring</span>
           </div>
@@ -1188,7 +1193,7 @@
             <div class="lesson-text">
               <strong style="color: var(--text-primary);">Decoupling is not an optimization — it's a reliability requirement.</strong>
               Connecting scraping directly to notification delivery means a Telegram API
-              failure stops the entire pipeline. The Redis queue was not added for scale;
+              failure stops the entire pipeline. The queue was not added for scale;
               it was added because the system couldn't survive without it.
             </div>
           </div>

@@ -301,6 +301,27 @@
 
     ul li { margin-bottom: 6px; }
 
+    .btn-store {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 28px;
+      padding: 11px 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .btn-store:hover {
+      background: rgba(79, 209, 197, 0.1);
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
+
     /* ── HERO ── */
     .project-hero {
       margin-bottom: 64px;
@@ -812,7 +833,7 @@
         </div>
         <p class="project-type">Caso de Estudio</p>
 
-        <div class="active-badge">En Desarrollo Activo</div>
+        <div class="active-badge">Disponible en Google Play</div>
 
         <nav aria-label="Secciones del caso de estudio">
           <a href="#overview" class="nav-link active">Descripción</a>
@@ -855,7 +876,7 @@
           </div>
           <div class="hero-meta-item">
             <span class="hero-meta-label">Estado</span>
-            <span class="hero-meta-value active">En Desarrollo Activo</span>
+            <span class="hero-meta-value active">Disponible en Google Play</span>
           </div>
           <div class="hero-meta-item">
             <span class="hero-meta-label">Tipo</span>
@@ -871,6 +892,8 @@
           <span class="pill">Salud y Bienestar</span>
           <span class="pill">Experiencia de Usuario</span>
         </div>
+
+        <a href="https://play.google.com/store/apps/details?id=mx.smae.tracker&amp;hl=es" class="btn-store" target="_blank" rel="noopener">Disponible en Google Play →</a>
       </div>
 
       <!-- ── PROBLEM ── -->

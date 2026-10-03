@@ -301,6 +301,27 @@
 
     ul li { margin-bottom: 6px; }
 
+    .btn-store {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 28px;
+      padding: 11px 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .btn-store:hover {
+      background: rgba(79, 209, 197, 0.1);
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
+
     /* ── HERO ── */
     .project-hero {
       margin-bottom: 64px;
@@ -816,7 +837,7 @@
         </div>
         <p class="project-type">Portfolio Case Study</p>
 
-        <div class="active-badge">Active Development</div>
+        <div class="active-badge">Live on Google Play</div>
 
         <nav aria-label="Case study sections">
           <a href="#overview" class="nav-link active">Overview</a>
@@ -858,7 +879,7 @@
           </div>
           <div class="hero-meta-item">
             <span class="hero-meta-label">Status</span>
-            <span class="hero-meta-value active">Active Development</span>
+            <span class="hero-meta-value active">Live on Google Play</span>
           </div>
           <div class="hero-meta-item">
             <span class="hero-meta-label">Type</span>
@@ -874,6 +895,8 @@
           <span class="pill">Health &amp; Wellness</span>
           <span class="pill">User Experience</span>
         </div>
+
+        <a href="https://play.google.com/store/apps/details?id=mx.smae.tracker&amp;hl=en" class="btn-store" target="_blank" rel="noopener">Get it on Google Play →</a>
       </div>
 
       <!-- ── PROBLEM ── -->
